@@ -50,7 +50,7 @@ export default function Study() {
         {/*breadCrumbNav */}
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
-            <a href="#">Home</a>
+            <Link to="/">Home</Link>
           </li>
           <li class="breadcrumb-item">
             <a href="#">{deckName}</a>

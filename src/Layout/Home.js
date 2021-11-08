@@ -1,5 +1,6 @@
+import { useState, useEffect } from "react";
+import { listDecks, readDeck } from "../utils/api";
 import { Link } from "react-router-dom";
-import CardTemplate from "./CardTemplate";
 
 export default function Home() {
   /* 
@@ -27,37 +28,101 @@ is shown and the user can click "OK" or "Cancel". If the user
 You can use window.confirm() to create the modal dialog shown
  in the screenshot below.
  */
+  const [deckListData, setDeckListData] = useState([]);
   const deleteButtonHandler = () => {
     //remove deck
     //window.confirm
-    if (window.confirm("Do you really want to Delete?")) {
+    if (window.confirm("Do you really want to quash this item?")) {
       window.open("exit.html", "Thanks for Visiting!");
     }
   };
+  useEffect(() => {
+    async function loadDecks() {
+      const listDecksResponse = await listDecks();
+
+      setDeckListData(listDecksResponse);
+    }
+    loadDecks();
+  }, []);
+  console.log("Home-ln49-deckListdata:", deckListData);
 
   return (
-    <div>
-      <>
-        <Link class="btn btn-secondary" to="/decks/new">
-          {" "}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="currentColor"
-            class="bi bi-plus"
-            viewBox="1 1 16 16"
-          >
-            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-          </svg>{" "}
-          {"Create Deck"}
-        </Link>
-        <div>
-          <p>CardComponent</p>
-          <CardTemplate deleteButtonHandler={deleteButtonHandler} />
+    <>
+      <Link class="btn btn-secondary" to="/decks/new">
+        {" "}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="currentColor"
+          class="bi bi-plus"
+          viewBox="1 1 16 16"
+        >
+          <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+        </svg>{" "}
+        {"Create Deck"}
+      </Link>
+      {deckListData.map((deck) => (
+        <div class="card" style={{ width: "18rem" }}>
+          <div class="card-body">
+            <h5 class="card-title">{deck.name}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+            <p class="card-text">{deck.description}</p>
+            <div class="row">
+              <div class="col">
+                <Link class="btn btn-secondary" to="/decks/:deckId">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-eye-fill"
+                    viewBox="0 1 16 16"
+                  >
+                    <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
+                    <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
+                  </svg>
+                  {" View"}
+                </Link>
+                <Link class="btn btn-primary" to="/decks/:deckId/study">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-mortarboard-fill"
+                    viewBox="1 1 16 16"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M8.211 2.047a.5.5 0 0 0-.422 0l-7.5 3.5a.5.5 0 0 0 .025.917l7.5 3a.5.5 0 0 0 .372 0L14 7.14V13a1 1 0 0 0-1 1v2h3v-2a1 1 0 0 0-1-1V6.739l.686-.275a.5.5 0 0 0 .025-.917l-7.5-3.5Z"
+                    />
+                    <path
+                      fill-rule="evenodd"
+                      d="M4.176 9.032a.5.5 0 0 0-.656.327l-.5 1.7a.5.5 0 0 0 .294.605l4.5 1.8a.5.5 0 0 0 .372 0l4.5-1.8a.5.5 0 0 0 .294-.605l-.5-1.7a.5.5 0 0 0-.656-.327L8 10.466 4.176 9.032Z"
+                    />
+                  </svg>
+                  {" Study"}
+                </Link>
+              </div>
+              <div class="col-right">
+                <Link class="btn btn-danger" onClick={deleteButtonHandler}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-trash-fill"
+                    viewBox="0 1 16 16"
+                  >
+                    <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+                  </svg>
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
-      </>
-      g{" "}
-    </div>
+      ))}
+    </>
   );
 }
