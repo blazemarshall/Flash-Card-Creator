@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Route, Switch, Link } from "react-router-dom";
 import Header from "./Header";
 
@@ -12,13 +12,12 @@ import EditCard from "./EditCard";
 import NotFound from "./NotFound";
 
 function Layout() {
+  const { toggleFrontOrBack, setToggleFrontOrBack } = useState("false");
   return (
     <>
       <Header />
       <div className="container">
-        <div>
-          <Link to="/">Home</Link>
-        </div>
+        <div>{/*  <Link to="/">Home</Link>*/}</div>
         {/* TODO: Implement the screen starting here 
             //home
             //study
