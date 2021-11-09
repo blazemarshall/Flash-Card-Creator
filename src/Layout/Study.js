@@ -53,7 +53,7 @@ export default function Study() {
             <Link to="/">Home</Link>
           </li>
           <li class="breadcrumb-item">
-            <a href="#">{deckName}</a>
+            <Link to="#">{deckName}</Link>
           </li>
           <li class="breadcrumb-item active" aria-current="page">
             Study

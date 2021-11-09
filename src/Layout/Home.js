@@ -29,12 +29,17 @@ You can use window.confirm() to create the modal dialog shown
  in the screenshot below.
  */
   const [deckListData, setDeckListData] = useState([]);
-  const deleteButtonHandler = () => {
+  const deleteButtonHandler = (event) => {
+    // const keyId = event.target.getAttribute("key");
+    //setDeckListData(deckListData.filter((item) => item.key !== keyId));
     //remove deck
     //window.confirm
-    if (window.confirm("Do you really want to quash this item?")) {
-      window.open("exit.html", "Thanks for Visiting!");
-    }
+    // if (window.confirm("Do you really want to quash this item?")) {
+    //   //setDeckListData((dataDeckList) => {});
+    //   console.log("deleted");
+    //   // deckListData.filter(deck,index) => index !== )
+    //   window.open("/", "Thanks for Visiting!");
+    // }
   };
   useEffect(() => {
     async function loadDecks() {
@@ -62,11 +67,14 @@ You can use window.confirm() to create the modal dialog shown
         </svg>{" "}
         {"Create Deck"}
       </Link>
-      {deckListData.map((deck) => (
-        <div class="card" style={{ width: "18rem" }}>
+      {deckListData.map((deck, index) => (
+        <div key={index} class="card" style={{ width: "18rem" }}>
           <div class="card-body">
             <h5 class="card-title">{deck.name}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+            <h6 class="card-subtitle mb-2 text-muted">
+              {index}
+              {" :index"}
+            </h6>
             <p class="card-text">{deck.description}</p>
             <div class="row">
               <div class="col">
