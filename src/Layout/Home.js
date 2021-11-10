@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { listDecks, readDeck } from "../utils/api";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
-export default function Home() {
+export default function Home({ deckListData, setDeckListData }) {
   /* 
  has the following features
  
@@ -28,26 +28,37 @@ is shown and the user can click "OK" or "Cancel". If the user
 You can use window.confirm() to create the modal dialog shown
  in the screenshot below.
  */
-  const [deckListData, setDeckListData] = useState([]);
-  const deleteButtonHandler = (event) => {
-    // const keyId = event.target.getAttribute("key");
-    //setDeckListData(deckListData.filter((item) => item.key !== keyId));
-    //remove deck
-    //window.confirm
-    // if (window.confirm("Do you really want to quash this item?")) {
-    //   //setDeckListData((dataDeckList) => {});
-    //   console.log("deleted");
-    //   // deckListData.filter(deck,index) => index !== )
-    //   window.open("/", "Thanks for Visiting!");
-    // }
+  const history = useHistory();
+
+  const deleteButtonHandler = (indexToDelete) => {
+    if (window.confirm("Do you really want to quash this item?")) {
+      window.alert("Oh, you've done, did it now!");
+      setDeckListData(
+        deckListData.filter((deck, index) => index !== indexToDelete)
+      );
+    } else {
+      window.alert("Thank God!");
+    }
   };
   useEffect(() => {
+    const ac = new AbortController();
     async function loadDecks() {
-      const listDecksResponse = await listDecks();
-
-      setDeckListData(listDecksResponse);
+      try {
+        const listDecksResponse = await listDecks();
+        setDeckListData(listDecksResponse);
+      } catch (error) {
+        if (error.name === "AbortError") {
+          console.log("Aborted");
+        } else {
+          throw error;
+        }
+      }
     }
     loadDecks();
+    return () => {
+      // console.log("cleanup");
+      ac.abort();
+    };
   }, []);
   console.log("Home-ln49-deckListdata:", deckListData);
 
@@ -68,17 +79,16 @@ You can use window.confirm() to create the modal dialog shown
         {"Create Deck"}
       </Link>
       {deckListData.map((deck, index) => (
-        <div key={index} class="card" style={{ width: "18rem" }}>
+        <div key={index} id={deck.id} class="card" style={{ width: "18rem" }}>
+          {/*---Deck card render---*/}
           <div class="card-body">
             <h5 class="card-title">{deck.name}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">
-              {index}
-              {" :index"}
-            </h6>
+            <h6 class="card-subtitle mb-2 text-muted"></h6>
             <p class="card-text">{deck.description}</p>
             <div class="row">
               <div class="col">
-                <Link class="btn btn-secondary" to="/decks/:deckId">
+                {/*---View---*/}
+                <Link class="btn btn-secondary" to={`/decks/${deck.id}`}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
@@ -92,7 +102,8 @@ You can use window.confirm() to create the modal dialog shown
                   </svg>
                   {" View"}
                 </Link>
-                <Link class="btn btn-primary" to="/decks/:deckId/study">
+                {/*---Study---*/}
+                <Link class="btn btn-primary" to={`/decks/${deck.id}/study`}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
@@ -114,7 +125,10 @@ You can use window.confirm() to create the modal dialog shown
                 </Link>
               </div>
               <div class="col-right">
-                <Link class="btn btn-danger" onClick={deleteButtonHandler}>
+                <button
+                  class="btn btn-danger"
+                  onClick={() => deleteButtonHandler(index)}
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
@@ -125,7 +139,7 @@ You can use window.confirm() to create the modal dialog shown
                   >
                     <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
                   </svg>
-                </Link>
+                </button>
               </div>
             </div>
           </div>

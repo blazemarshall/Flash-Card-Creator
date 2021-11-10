@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useParams } from "react-router-dom";
 /* allows the user to study the cards from a specified deck
      location: /decks/:deckId/study
 
@@ -42,8 +42,51 @@ Studying a Deck with two or fewer cards should display
 
 */
 
-export default function Study() {
-  const deckName = "SomeDeck";
+export default function Study({ deckListData, setDeckListData }) {
+  //-----------hook Variables------------------
+  const [front, setFront] = useState(true);
+  const [clickNumber, setClickNumber] = useState(1);
+  const { deckId } = useParams();
+  const [cardNumber, setCardNumber] = useState(0);
+
+  //-----filters prop decklistData to only selected deck-----
+  const currentLoadedDeck = deckListData.filter(
+    (currentDeck) => deckId == currentDeck.id
+  );
+
+  //------variables-----------------------
+  const cardList = currentLoadedDeck[0].cards;
+  let currentCard = cardList[cardNumber];
+  let frontOrBackDescription = null;
+  let frontOrBackText = null;
+
+  //---------handles flip button for cards---------
+
+  const flipHandler = () => {
+    setFront(!front);
+  };
+  //---------handles next button for cards----------
+  const nextHandler = () => {
+    setFront(true);
+
+    if (cardNumber < cardList.length - 1) {
+      setCardNumber(cardNumber + 1);
+      setClickNumber(clickNumber + 1);
+    } else {
+      setCardNumber(0);
+      setClickNumber(1);
+    }
+  };
+  //---------logic for front or back of card---------
+  if (front) {
+    frontOrBackDescription = currentCard.front;
+    frontOrBackText = "Front";
+  } else {
+    frontOrBackDescription = currentCard.back;
+    frontOrBackText = "Back";
+
+    //-------render return--------------
+  }
   return (
     <>
       <nav aria-label="breadcrumb">
@@ -53,7 +96,7 @@ export default function Study() {
             <Link to="/">Home</Link>
           </li>
           <li class="breadcrumb-item">
-            <Link to="#">{deckName}</Link>
+            <Link to="/decks/{currentLoadedDeck[0].id}">{`${currentLoadedDeck[0].name}`}</Link>
           </li>
           <li class="breadcrumb-item active" aria-current="page">
             Study
@@ -61,23 +104,31 @@ export default function Study() {
         </ol>{" "}
         {/**/}
       </nav>
-      <h1>Deck Title</h1>
+      <h1>Study:{currentLoadedDeck[0].name}</h1>
+
       <div class="card" style={{ width: "18rem" }}>
         <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-          <p class="card-text">
-            Some quick example text to build on the card title and make up the
-            bulk of the card's content.
-          </p>
-          <Link href="#" class="card-link">
+          <h5 class="card-title">
+            {clickNumber}
+            {" of "}
+            {cardList.length}
+          </h5>
+          <h6 class="card-subtitle mb-2 text-muted">{frontOrBackText}</h6>
+          <p class="card-text">{frontOrBackDescription}</p>
+          <button onClick={flipHandler} class="card-link btn btn-secondary">
             Flip
-          </Link>
-          <Link href="#" class="card-link">
-            Next
-          </Link>
+          </button>
+          {!front ? (
+            <button onClick={nextHandler} class="card-link btn btn-primary">
+              Next
+            </button>
+          ) : (
+            <div></div>
+          )}
         </div>
       </div>
     </>
   );
+
+  // );
 }

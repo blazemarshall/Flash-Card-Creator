@@ -13,6 +13,7 @@ import NotFound from "./NotFound";
 
 function Layout() {
   const { toggleFrontOrBack, setToggleFrontOrBack } = useState("false");
+  const [deckListData, setDeckListData] = useState([]);
   return (
     <>
       <Header />
@@ -30,10 +31,16 @@ function Layout() {
               */}
         <Switch>
           <Route exact path="/">
-            <Home />
+            <Home
+              deckListData={deckListData}
+              setDeckListData={setDeckListData}
+            />
           </Route>
           <Route path="/decks/:deckId/study">
-            <Study />
+            <Study
+              deckListData={deckListData}
+              setDeckListData={setDeckListData}
+            />
           </Route>
           <Route path="/decks/new">
             <CreateDeck />
