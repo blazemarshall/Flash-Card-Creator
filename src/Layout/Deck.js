@@ -1,49 +1,102 @@
 import React from "react";
-/* shows all of the information about a specified deck with
- options to edit or add cards to the deck, navigate to the
-  study screen, or delete the deck
-  location: /decks/:deckId
+import { Link } from "react-router-dom";
 
-  The Deck screen displays all of the information about a deck.
-  The path to this screen should include the deckId (i.e., /decks/:deckId).
-You must use the readDeck() function from src/utils/api/index.js
- to load the existing deck.
-There is a breadcrumb navigation bar with a link to home / followed
- by the name of the deck (e.g., Home/React Router).
-The screen includes the deck name (e.g., "React Router") and deck
- description (e.g., "React Router is a collection of navigational
-  components that compose declaratively in your application").
-The screen includes "Edit", "Study", "Add Cards", and "Delete"
- buttons. Each button takes the user to a different destination, as follows:
-
-| Button Clicked | Destination |
-| -------------- | ---------------------------------------------
-------------------------------------------------- |
-| "Edit" | Edit Deck Screen |
-| "Study" | Study screen |
-| "Add Cards" | Add Card screen |
-| "Delete" | Shows a warning message before deleting the deck]
-( See the "Delete Card Prompt" section below) |
-
-Each card in the deck:
-
-is listed on the page under the "Cards" heading.
-shows a question and the answer to the question.
-has an “Edit” button that takes the user to the Edit Card
- screen when clicked.
-has a “Delete” button that allows that card to be deleted.
-
-
-When the user clicks the "Delete" button associated with 
-a card, a warning message is shown and the user can click 
-"OK" or "Cancel". If the user clicks "OK", the card is deleted.
-
-You can use window.confirm() to create the modal dialog 
-shown in the screenshot below.
-
-
-
-  */
 export default function Deck() {
-  return <></>;
+  return (
+    <div>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <Link to="/">Home</Link>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">
+            deckName
+          </li>
+        </ol>
+      </nav>
+      {/* {deckListData.map((deck, index) => ( */}
+      <div
+        key="index"
+        id="deck.id"
+        className="card "
+        style={{ width: "18rem" }}
+      >
+        {/*---Deck card render---*/}
+        <div className="card-body-9">
+          <h5 className="card-title">deck.name</h5>
+          <h6 className="card-subtitle mb-2 text-muted">CHangeME</h6>
+          <p className="card-text">deck.description</p>
+
+          <div className="row">
+            {/*---View---*/}
+            <Link className="btn btn-secondary" to={`/decks/{deck.id}`}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="bi bi-eye-fill"
+                viewBox="0 1 16 16"
+              >
+                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
+                <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
+              </svg>
+              {" View"}
+            </Link>
+            {/*---Study---*/}
+            <Link className="btn btn-primary" to={`/decks/deck.id/study`}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="bi bi-mortarboard-fill"
+                viewBox="1 1 16 16"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M8.211 2.047a.5.5 0 0 0-.422 0l-7.5 3.5a.5.5 0 0 0 .025.917l7.5 3a.5.5 0 0 0 .372 0L14 7.14V13a1 1 0 0 0-1 1v2h3v-2a1 1 0 0 0-1-1V6.739l.686-.275a.5.5 0 0 0 .025-.917l-7.5-3.5Z"
+                />
+                <path
+                  fillRule="evenodd"
+                  d="M4.176 9.032a.5.5 0 0 0-.656.327l-.5 1.7a.5.5 0 0 0 .294.605l4.5 1.8a.5.5 0 0 0 .372 0l4.5-1.8a.5.5 0 0 0 .294-.605l-.5-1.7a.5.5 0 0 0-.656-.327L8 10.466 4.176 9.032Z"
+                />
+              </svg>
+              {" Study"}
+            </Link>
+            {/*------addCard----*/}
+            <Link class="btn btn-primary" to={`/decks/{deckId}/cards/new`}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="currentColor"
+                class="bi bi-plus"
+                viewBox="1 1 16 16"
+              >
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+              </svg>{" "}
+              Add Cards
+            </Link>
+
+            <button
+              className="btn btn-danger"
+              // onClick={() => deleteButtonHandler(index)}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="bi bi-trash-fill"
+                viewBox="0 1 16 16"
+              >
+                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }

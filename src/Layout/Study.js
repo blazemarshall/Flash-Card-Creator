@@ -1,46 +1,7 @@
-import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
-/* allows the user to study the cards from a specified deck
-     location: /decks/:deckId/study
+import React, { useEffect, useState } from "react";
 
-The path to this screen should include the deckId (i.e., /decks/:deckId/study).
-You must use the readDeck() function from src/utils/api/index.js to load the 
-deck that is being studied.
-There is a breadcrumb navigation bar with links to home /, followed by the name
- of the deck being studied and finally the text Study (e.g., Home/Rendering In 
-    React/Study).
-The deck title (i.e., "Study: Rendering in React" ) is shown on the screen.
-Cards are shown one at a time, front-side first.
-A button at the bottom of each card "flips" it to the other side.
-After flipping the card, the screen shows a next button (see the "Next button" 
-section below) to continue to the next card.
-After the final card in the deck has been shown, a message (see the "Restart 
-prompt" section below) is shown offering the user the opportunity to restart
- the deck.
-If the user does not restart the deck, they should return to the home screen.
-Studying a deck with two or fewer cards should display a "Not enough cards" 
-message (see the "Not enough cards" section below) and a button to add cards 
-to the deck.
-The next button appears after the card is flipped.
-When all cards are finished, a message is shown and
- the user is offered the opportunity to restart the
-  deck. If the user does not restart the deck, they 
-  return to the home screen.
-
-You can use window.confirm() to create the modal
- dialog shown in the screenshot below.
-Studying a Deck with two or fewer cards should display
- a "Not enough cards" message and a button to add cards
-  to the deck.
-
-  Clicking the "Add Cards" button should take the user 
-  to the Add Card screen.
-
-
-//breadcrumbs component
-
-
-*/
+import { Link, useParams, useHistory } from "react-router-dom";
+import { readDeck } from "../utils/api";
 
 export default function Study({ deckListData, setDeckListData }) {
   //-----------hook Variables------------------
@@ -48,6 +9,7 @@ export default function Study({ deckListData, setDeckListData }) {
   const [clickNumber, setClickNumber] = useState(1);
   const { deckId } = useParams();
   const [cardNumber, setCardNumber] = useState(0);
+  const [loadedDeck, setLoadedDeck] = useState({});
 
   //-----filters prop decklistData to only selected deck-----
   const currentLoadedDeck = deckListData.filter(
@@ -55,8 +17,39 @@ export default function Study({ deckListData, setDeckListData }) {
   );
 
   //------variables-----------------------
-  const cardList = currentLoadedDeck[0].cards;
-  let currentCard = cardList[cardNumber];
+  const history = useHistory();
+  //original code to dissect card data from api
+  // const deck = currentLoadedDeck[0].cards;
+
+  //-------------------------readDeck useEffectHook function -------------------
+  useEffect(() => {
+    const ac = new AbortController();
+    setLoadedDeck({});
+    async function loadDeck() {
+      try {
+        const loadedResponse = await readDeck(deckId);
+        const deck = await loadedResponse.json();
+        setLoadedDeck(await loadedResponse);
+      } catch (error) {
+        if (error.name === "AbortError") {
+          console.log("Aborted");
+        } else {
+          throw error;
+        }
+      }
+    }
+    loadDeck();
+    return () => {
+      ac.abort();
+    };
+  }, []);
+
+  // const deck = loadedDeck;
+  const cardList = deck.cards;
+  console.log("study.cardLIst", loadedDeck);
+  // const currentCard = 0;
+  // let currentCard = cardList[cardNumber];
+  let currentCard = cardList;
   let frontOrBackDescription = null;
   let frontOrBackText = null;
 
@@ -68,18 +61,32 @@ export default function Study({ deckListData, setDeckListData }) {
   //---------handles next button for cards----------
   const nextHandler = () => {
     setFront(true);
-
-    if (cardNumber < cardList.length - 1) {
+    //increments cardNumber and clickNumber to advance cards.
+    if (cardNumber < deck.length - 1) {
       setCardNumber(cardNumber + 1);
       setClickNumber(clickNumber + 1);
     } else {
-      setCardNumber(0);
-      setClickNumber(1);
+      //restarts cardNumber to beginning.
+      if (
+        window.confirm(
+          "Would you like to restart from the beginning? \nClicking Cancel redirects you to the Home screen."
+        )
+      ) {
+        setCardNumber(0);
+        setClickNumber(1);
+      }
+      //redirects you to home screen
+      else {
+        window.alert("Adios. Heading to the Home screen");
+        history.push("/");
+      }
     }
   };
+  /* checks deck for length  */
+
   //---------logic for front or back of card---------
   if (front) {
-    frontOrBackDescription = currentCard.front;
+    frontOrBackDescription = loadedDeck.front;
     frontOrBackText = "Front";
   } else {
     frontOrBackDescription = currentCard.back;
@@ -96,7 +103,7 @@ export default function Study({ deckListData, setDeckListData }) {
             <Link to="/">Home</Link>
           </li>
           <li class="breadcrumb-item">
-            <Link to="/decks/{currentLoadedDeck[0].id}">{`${currentLoadedDeck[0].name}`}</Link>
+            <Link to="/decks/{currentLoadedDeck[0].id}">{deck.name}</Link>
           </li>
           <li class="breadcrumb-item active" aria-current="page">
             Study
@@ -104,28 +111,52 @@ export default function Study({ deckListData, setDeckListData }) {
         </ol>{" "}
         {/**/}
       </nav>
-      <h1>Study:{currentLoadedDeck[0].name}</h1>
+      <h1>Study:{deck.name}</h1>
 
       <div class="card" style={{ width: "18rem" }}>
-        <div class="card-body">
-          <h5 class="card-title">
-            {clickNumber}
-            {" of "}
-            {cardList.length}
-          </h5>
-          <h6 class="card-subtitle mb-2 text-muted">{frontOrBackText}</h6>
-          <p class="card-text">{frontOrBackDescription}</p>
-          <button onClick={flipHandler} class="card-link btn btn-secondary">
-            Flip
-          </button>
-          {!front ? (
-            <button onClick={nextHandler} class="card-link btn btn-primary">
-              Next
+        {deck.length <= 2 ? (
+          <div class="card-body">
+            <h5 class="card-title">Not enough cards</h5>
+            <h6 class="card-subtitle mb-2 text-muted">
+              You need at least 3 cards to study. There are {cardList.length}{" "}
+              cards in this deck.
+            </h6>
+            <Link class="btn btn-primary" to={`/decks/${deckId}/cards/new`}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="currentColor"
+                class="bi bi-plus"
+                viewBox="1 1 16 16"
+              >
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+              </svg>{" "}
+              Add Cards
+            </Link>
+          </div>
+        ) : (
+          <div class="card-body">
+            <h5 class="card-title">
+              {clickNumber}
+              {" of "}
+              {deck.length}
+            </h5>
+
+            <h6 class="card-subtitle mb-2 text-muted">{frontOrBackText}</h6>
+            <p class="card-text">{frontOrBackDescription}</p>
+            <button onClick={flipHandler} class="card-link btn btn-secondary">
+              Flip
             </button>
-          ) : (
-            <div></div>
-          )}
-        </div>
+            {!front ? (
+              <button onClick={nextHandler} class="card-link btn btn-primary">
+                Next
+              </button>
+            ) : (
+              <div></div>
+            )}
+          </div>
+        )}
       </div>
     </>
   );

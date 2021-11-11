@@ -12,8 +12,9 @@ import EditCard from "./EditCard";
 import NotFound from "./NotFound";
 
 function Layout() {
-  const { toggleFrontOrBack, setToggleFrontOrBack } = useState("false");
+  // const { toggleFrontOrBack, setToggleFrontOrBack } = useState("false");
   const [deckListData, setDeckListData] = useState([]);
+
   return (
     <>
       <Header />
@@ -43,7 +44,7 @@ function Layout() {
             />
           </Route>
           <Route path="/decks/new">
-            <CreateDeck />
+            <CreateDeck setDeckListData={setDeckListData} />
           </Route>
           <Route exact path="/decks/:deckId">
             <Deck />
