@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Route, Switch, Link } from "react-router-dom";
-import Header from "./Header";
+import Header from "./common/Header";
 
 import Home from "./Home";
-import Study from "./Study";
+import Study from "./Study/Study.js";
 import CreateDeck from "./CreateDeck";
 import Deck from "./Deck";
 import EditDeck from "./EditDeck";

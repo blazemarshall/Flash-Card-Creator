@@ -1,35 +1,34 @@
 import React, { useEffect, useState } from "react";
-
 import { Link, useParams, useHistory } from "react-router-dom";
-import { readDeck } from "../utils/api";
-
-export default function Study({ deckListData, setDeckListData }) {
+import { readDeck } from "../../utils/api";
+// import ReadDeckComp from "../common/ReadDeckComp";
+// import FrontFunction from "./FrontFunction";
+// import NextHandler from "./NextHandler";
+export default function Study() {
   //-----------hook Variables------------------
   const [front, setFront] = useState(true);
   const [clickNumber, setClickNumber] = useState(1);
   const { deckId } = useParams();
-  const [cardNumber, setCardNumber] = useState(0);
-  const [loadedDeck, setLoadedDeck] = useState({});
+  const [currentCard, setCurrentCard] = useState(0);
+  const [loadedDeck, setLoadedDeck] = useState({
+    cards: [{ front: "", back: "" }],
+  });
 
-  //-----filters prop decklistData to only selected deck-----
-  const currentLoadedDeck = deckListData.filter(
-    (currentDeck) => deckId == currentDeck.id
-  );
-
+  let frontOrBackText = "front";
   //------variables-----------------------
   const history = useHistory();
-  //original code to dissect card data from api
-  // const deck = currentLoadedDeck[0].cards;
 
   //-------------------------readDeck useEffectHook function -------------------
+  // <ReadDeckComp deckId={deckId} setLoadedDeck={setLoadedDeck} />;
   useEffect(() => {
     const ac = new AbortController();
-    setLoadedDeck({});
+
     async function loadDeck() {
       try {
-        const loadedResponse = await readDeck(deckId);
-        const deck = await loadedResponse.json();
-        setLoadedDeck(await loadedResponse);
+        const response = await readDeck(deckId);
+        const deck = await response;
+        console.log("loadDeckAsyncFunctUseeffct.deck", deck);
+        setLoadedDeck(deck);
       } catch (error) {
         if (error.name === "AbortError") {
           console.log("Aborted");
@@ -39,40 +38,60 @@ export default function Study({ deckListData, setDeckListData }) {
       }
     }
     loadDeck();
+    // setFrontOrBackDescription(loadedDeck.cards[0].back);
     return () => {
       ac.abort();
     };
-  }, []);
+  }, [deckId]);
 
-  // const deck = loadedDeck;
-  const cardList = deck.cards;
-  console.log("study.cardLIst", loadedDeck);
-  // const currentCard = 0;
-  // let currentCard = cardList[cardNumber];
-  let currentCard = cardList;
-  let frontOrBackDescription = null;
-  let frontOrBackText = null;
+  //destructures loadedDeck into card list of card objects and the name of deck.
+  const { cards, name } = loadedDeck;
 
+  //without frontOrBack as a variable; the cards do not display the front text on load.
+  let frontOrBackDescription = "";
+  console.log(front);
+  console.log("Front or back Desc", frontOrBackDescription);
   //---------handles flip button for cards---------
-
   const flipHandler = () => {
     setFront(!front);
+
+    //Tried to componentize without success.
+    // FrontFunction(
+    //   front,
+    //   setFrontOrBackDescription,
+    //   setFrontOrBackText,
+    //   cards,
+    //   currentCard
+    // );
+    // setFront(!front);
   };
+
   //---------handles next button for cards----------
+  //Tried to componentize without success.
+  // <NextHandler
+  //   setFront={setFront}
+  //   cards={cards}
+  //   setCurrentCard={setCurrentCard}
+  //   setClickNumber={setClickNumber}
+  //   currentCard={currentCard}
+  //   clickNumber={clickNumber}
+  //   history={history}
+  // />;
+
   const nextHandler = () => {
     setFront(true);
-    //increments cardNumber and clickNumber to advance cards.
-    if (cardNumber < deck.length - 1) {
-      setCardNumber(cardNumber + 1);
-      setClickNumber(clickNumber + 1);
+    //increments currentCardNumber and clickNumber to advance cards.
+    if (currentCard < cards.length - 1) {
+      setCurrentCard(() => currentCard + 1);
+      setClickNumber(() => clickNumber + 1);
     } else {
-      //restarts cardNumber to beginning.
+      //restarts currentCardNumber to beginning.
       if (
         window.confirm(
           "Would you like to restart from the beginning? \nClicking Cancel redirects you to the Home screen."
         )
       ) {
-        setCardNumber(0);
+        setCurrentCard(0);
         setClickNumber(1);
       }
       //redirects you to home screen
@@ -82,17 +101,13 @@ export default function Study({ deckListData, setDeckListData }) {
       }
     }
   };
-  /* checks deck for length  */
-
   //---------logic for front or back of card---------
   if (front) {
-    frontOrBackDescription = loadedDeck.front;
+    frontOrBackDescription = cards[currentCard].front;
     frontOrBackText = "Front";
   } else {
-    frontOrBackDescription = currentCard.back;
+    frontOrBackDescription = cards[currentCard].back;
     frontOrBackText = "Back";
-
-    //-------render return--------------
   }
   return (
     <>
@@ -103,22 +118,22 @@ export default function Study({ deckListData, setDeckListData }) {
             <Link to="/">Home</Link>
           </li>
           <li class="breadcrumb-item">
-            <Link to="/decks/{currentLoadedDeck[0].id}">{deck.name}</Link>
+            <Link to="/decks/{currentLoadedDeck[0].id}">{name}</Link>
           </li>
           <li class="breadcrumb-item active" aria-current="page">
             Study
           </li>
         </ol>{" "}
-        {/**/}
+        {/*breadCrumbNav*/}
       </nav>
-      <h1>Study:{deck.name}</h1>
+      <h1>Study:{loadedDeck.name}</h1>
 
       <div class="card" style={{ width: "18rem" }}>
-        {deck.length <= 2 ? (
+        {cards.length <= 2 ? (
           <div class="card-body">
             <h5 class="card-title">Not enough cards</h5>
             <h6 class="card-subtitle mb-2 text-muted">
-              You need at least 3 cards to study. There are {cardList.length}{" "}
+              You need at least 3 cards to study. There are {cards.length}
               cards in this deck.
             </h6>
             <Link class="btn btn-primary" to={`/decks/${deckId}/cards/new`}>
@@ -140,7 +155,7 @@ export default function Study({ deckListData, setDeckListData }) {
             <h5 class="card-title">
               {clickNumber}
               {" of "}
-              {deck.length}
+              {cards.length}
             </h5>
 
             <h6 class="card-subtitle mb-2 text-muted">{frontOrBackText}</h6>

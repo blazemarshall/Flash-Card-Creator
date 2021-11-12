@@ -1,4 +1,6 @@
 import React from "react";
+import CardForm from "./common/CardForm";
+import ReadDeckComp from "./common/ReadDeckComp";
 /* allows the user to modify information on an existing card
     Location: /decks/:deckId/cards/:cardId/edit
 
@@ -19,5 +21,10 @@ If the user clicks on either "Save" or "Cancel", the user
  is taken to the Deck screen.
 */
 export default function EditCard() {
-  return <></>;
+  return (
+    <>
+      <CardForm />
+      <ReadDeckComp />
+    </>
+  );
 }
