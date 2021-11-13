@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
-
+import { Link, useHistory, useParams } from "react-router-dom";
+import { createDeck } from "../utils/api";
 /* allows the user to create a new deck
     location: /decks/new
 
@@ -19,15 +19,28 @@ can be multiple lines of text.
 If the user clicks "submit", the user is taken to the Deck screen.
 If the user clicks "cancel", the user is taken to the Home screen.
 */
-export default function CreateDeck(setDeckListdata) {
-  const history = useHistory;
-  const initalFormData = { name: "", description: "", cards: [], id: "" };
-  const [formData, setFormData] = useState({});
-  const submitHandler = () => {};
+export default function CreateDeck() {
+  const history = useHistory();
+
+  const initalFormData = { name: "", description: "" };
+
+  const [formData, setFormData] = useState({ ...initalFormData });
+
   const changeHandler = ({ target }) => {
-    {
-      setFormData({ ...formData });
-    }
+    setFormData({
+      ...formData,
+      [target.name]: target.value,
+    });
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    let destination = "";
+    createDeck(formData)
+      .then((response) => (destination = response.id))
+      .then(() => history.push(`/decks/${destination}`));
+
+    console.log("formData:", formData);
   };
   return (
     <div>
@@ -41,28 +54,34 @@ export default function CreateDeck(setDeckListdata) {
           </li>
         </ol>
       </nav>
+      <h1>Create Deck</h1>
       <form onSubmit={submitHandler}>
         <div class="mb-3">
-          <label for="form1" class="form-label">
+          <label htmlFor="name" class="form-label">
             Name
           </label>
           <input
-            type="email"
-            class="form-control"
-            id="form1"
+            name="name"
+            type="text"
+            className="form-control"
+            id="name"
             placeholder="Deck Name"
+            onChange={changeHandler}
+            value={formData.name}
           />
         </div>
         <div class="mb-3">
-          <label for="form2" class="form-label">
+          <label htmlFor="description" class="form-label">
             Description
           </label>
           <textarea
+            name="description"
             placeholder="Brief description of the deck"
-            class="form-control"
-            id="form2"
+            className="form-control"
+            id="description"
             rows="3"
-            value=""
+            value={formData.description}
+            onChange={changeHandler}
           ></textarea>
           <div>
             <Link to="/" class="btn btn-secondary">

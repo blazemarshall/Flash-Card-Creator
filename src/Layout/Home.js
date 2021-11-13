@@ -1,22 +1,21 @@
 import { useState, useEffect } from "react";
-import { listDecks } from "../utils/api";
-import { Link } from "react-router-dom";
+import { deleteDeck, listDecks } from "../utils/api";
+import { Link, useHistory } from "react-router-dom";
 
 export default function Home({ deckListData, setDeckListData }) {
-  // const history = useHistory();
+  const history = useHistory();
 
-  const deleteButtonHandler = (indexToDelete) => {
+  async function deleteButtonHandler(indexToDelete) {
     //needs to be changed to allow direct manipulation of the api data.
     //currently only deletes from a temporary array.
     if (window.confirm("Do you really want to quash this item?")) {
       window.alert("Oh, you've done, did it now!");
-      setDeckListData(
-        deckListData.filter((deck, index) => index !== indexToDelete)
-      );
+      await deleteDeck(indexToDelete).then(history.push("/"));
+      setDeckListData(await listDecks());
     } else {
       window.alert("Thank God!");
     }
-  };
+  }
   useEffect(() => {
     const ac = new AbortController();
     async function loadDecks() {
@@ -112,7 +111,7 @@ export default function Home({ deckListData, setDeckListData }) {
               <div className="col-right">
                 <button
                   className="btn btn-danger"
-                  onClick={() => deleteButtonHandler(index)}
+                  onClick={() => deleteButtonHandler(deck.id)}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

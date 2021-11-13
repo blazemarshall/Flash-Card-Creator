@@ -21,10 +21,5 @@ If the user clicks on either "Save" or "Cancel", the user
  is taken to the Deck screen.
 */
 export default function EditCard() {
-  return (
-    <>
-      <CardForm />
-      <ReadDeckComp />
-    </>
-  );
+  return <></>;
 }

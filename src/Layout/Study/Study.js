@@ -102,6 +102,9 @@ export default function Study() {
     }
   };
   //---------logic for front or back of card---------
+  if (!cards) {
+    return null;
+  }
   if (front) {
     frontOrBackDescription = cards[currentCard].front;
     frontOrBackText = "Front";
@@ -113,14 +116,14 @@ export default function Study() {
     <>
       <nav aria-label="breadcrumb">
         {/*breadCrumbNav */}
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
+        <ol className="breadcrumb">
+          <li className="breadcrumb-item">
             <Link to="/">Home</Link>
           </li>
-          <li class="breadcrumb-item">
-            <Link to="/decks/{currentLoadedDeck[0].id}">{name}</Link>
+          <li className="breadcrumb-item">
+            <Link to={`/decks/${deckId}`}>{name}</Link>
           </li>
-          <li class="breadcrumb-item active" aria-current="page">
+          <li className="breadcrumb-item active" aria-current="page">
             Study
           </li>
         </ol>{" "}
@@ -128,21 +131,21 @@ export default function Study() {
       </nav>
       <h1>Study:{loadedDeck.name}</h1>
 
-      <div class="card" style={{ width: "18rem" }}>
+      <div className="card" style={{ width: "18rem" }}>
         {cards.length <= 2 ? (
-          <div class="card-body">
-            <h5 class="card-title">Not enough cards</h5>
-            <h6 class="card-subtitle mb-2 text-muted">
+          <div className="card-body">
+            <h5 className="card-title">Not enough cards</h5>
+            <h6 className="card-subtitle mb-2 text-muted">
               You need at least 3 cards to study. There are {cards.length}
               cards in this deck.
             </h6>
-            <Link class="btn btn-primary" to={`/decks/${deckId}/cards/new`}>
+            <Link className="btn btn-primary" to={`/decks/${deckId}/cards/new`}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
                 fill="currentColor"
-                class="bi bi-plus"
+                className="bi bi-plus"
                 viewBox="1 1 16 16"
               >
                 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
@@ -151,20 +154,26 @@ export default function Study() {
             </Link>
           </div>
         ) : (
-          <div class="card-body">
-            <h5 class="card-title">
+          <div className="card-body">
+            <h5 className="card-title">
               {clickNumber}
               {" of "}
               {cards.length}
             </h5>
 
-            <h6 class="card-subtitle mb-2 text-muted">{frontOrBackText}</h6>
-            <p class="card-text">{frontOrBackDescription}</p>
-            <button onClick={flipHandler} class="card-link btn btn-secondary">
+            <h6 className="card-subtitle mb-2 text-muted">{frontOrBackText}</h6>
+            <p className="card-text">{frontOrBackDescription}</p>
+            <button
+              onClick={flipHandler}
+              className="card-link btn btn-secondary"
+            >
               Flip
             </button>
             {!front ? (
-              <button onClick={nextHandler} class="card-link btn btn-primary">
+              <button
+                onClick={nextHandler}
+                className="card-link btn btn-primary"
+              >
                 Next
               </button>
             ) : (

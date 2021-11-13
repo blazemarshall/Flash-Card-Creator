@@ -1,4 +1,5 @@
 import React from "react";
+import Deck from "./Deck";
 /*
  Location: /decks/:deckId/edit
 allows the user to modify information on an existing deck
@@ -19,5 +20,6 @@ If the user clicks "Cancel", the user is taken
 to the Deck screen.
 */
 export default function EditDeck() {
+  Deck();
   return <></>;
 }

@@ -1,7 +1,36 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { readDeck } from "../utils/api";
 
-export default function Deck() {
+let deck = {};
+export default async function Deck() {
+  const params = useParams();
+  const { deckId } = params;
+  const [deckLoaded, setDeckLoaded] = useState({});
+  // useEffect(() => {
+  //   const ac = new AbortController();
+
+  //   async function loadDeck() {
+  //     try {
+  //       const response = await readDeck(deckId);
+  //       const deck = await response;
+  //       console.log("loadDeckAsyncFunctUseeffct.deck", deck);
+  //       setDeckLoaded(deck);
+  //     } catch (error) {
+  //       if (error.name === "AbortError") {
+  //         console.log("Aborted");
+  //       } else {
+  //         throw error;
+  //       }
+  //     }
+  //   }
+  //   loadDeck();
+  //   // setFrontOrBackDescription(loadedDeck.cards[0].back);
+  //   return () => {
+  //     ac.abort();
+  //   };
+  // }, [deckId]);
+  console.log("deckScreen", deckLoaded);
   return (
     <div>
       <nav aria-label="breadcrumb">
@@ -10,7 +39,7 @@ export default function Deck() {
             <Link to="/">Home</Link>
           </li>
           <li class="breadcrumb-item active" aria-current="page">
-            deckName
+            {deckLoaded.name}
           </li>
         </ol>
       </nav>
@@ -23,13 +52,13 @@ export default function Deck() {
       >
         {/*---Deck card render---*/}
         <div className="card-body-9">
-          <h5 className="card-title">deck.name</h5>
-          <h6 className="card-subtitle mb-2 text-muted">CHangeME</h6>
-          <p className="card-text">deck.description</p>
+          <h5 className="card-title">{deckLoaded.name}</h5>
+          {/* <h6 className="card-subtitle mb-2 text-muted">CHangeME</h6> */}
+          <p className="card-text">{deckLoaded.description}</p>
 
           <div className="row">
-            {/*---View---*/}
-            <Link className="btn btn-secondary" to={`/decks/{deck.id}`}>
+            {/*---Edit---*/}
+            <Link className="btn btn-secondary" to={`/decks/${deckLoaded.id}`}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -41,7 +70,7 @@ export default function Deck() {
                 <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
                 <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
               </svg>
-              {" View"}
+              {" Edit"}
             </Link>
             {/*---Study---*/}
             <Link className="btn btn-primary" to={`/decks/deck.id/study`}>
@@ -65,7 +94,7 @@ export default function Deck() {
               {" Study"}
             </Link>
             {/*------addCard----*/}
-            <Link class="btn btn-primary" to={`/decks/{deckId}/cards/new`}>
+            <Link class="btn btn-primary" to={`/decks/${deckId}/cards/new`}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
