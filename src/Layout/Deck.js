@@ -1,21 +1,63 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { readDeck } from "../utils/api";
+import { readDeck, readCard } from "../utils/api";
 
-let deck = {};
-export default async function Deck() {
+export default function Deck() {
   const params = useParams();
-  const { deckId } = params;
+  const { deckId, cardId } = params;
   const [deckLoaded, setDeckLoaded] = useState({});
-  // useEffect(() => {
-  //   const ac = new AbortController();
+  const [cardLoaded, setCardLoaded] = useState({});
 
-  //   async function loadDeck() {
+  useEffect(() => {
+    const ac = new AbortController();
+    // let deck = {};
+    async function reloadDeck() {
+      try {
+        const response = await readDeck(deckId);
+        // const cardResponse = await readCard(cardId);
+        const deck = await response;
+        // const card = await cardResponse;
+        console.log(
+          "loadDeckAsyncFunctUseeffct.deck and card",
+          deck,
+          "card"
+          // card
+        );
+        setDeckLoaded(deck);
+        // setCardLoaded(card);
+      } catch (error) {
+        if (error.name === "AbortError") {
+          console.log("Aborted");
+        } else {
+          throw error;
+        }
+      }
+    }
+    reloadDeck();
+    console.log();
+    // setFrontOrBackDescription(loadedDeck.cards[0].back);
+    return () => {
+      ac.abort();
+    };
+  }, [deckId]);
+
+  // useEffect(() => {
+  //   const abortC = new AbortController();
+  //   // let deck = {};
+  //   async function loadCard() {
   //     try {
-  //       const response = await readDeck(deckId);
-  //       const deck = await response;
-  //       console.log("loadDeckAsyncFunctUseeffct.deck", deck);
-  //       setDeckLoaded(deck);
+  //       const response = await readCard(cardId);
+  //       // const cardResponse = await readCard(cardId);
+  //       const card = await response;
+  //       // const card = await cardResponse;
+  //       console.log(
+  //         "load card",
+  //         // deck,
+  //         "card"
+  //         // card
+  //       );
+  //       setCardLoaded(card);
+  //       // setCardLoaded(card);
   //     } catch (error) {
   //       if (error.name === "AbortError") {
   //         console.log("Aborted");
@@ -24,15 +66,23 @@ export default async function Deck() {
   //       }
   //     }
   //   }
-  //   loadDeck();
+  //   loadCard();
+  //   console.log();
   //   // setFrontOrBackDescription(loadedDeck.cards[0].back);
   //   return () => {
-  //     ac.abort();
+  //     abortC.abort();
   //   };
-  // }, [deckId]);
-  console.log("deckScreen", deckLoaded);
+  // }, [cardId]);
+  // deck.cards.map((card)=>{})
+  //    cards:[
+  //     card 1 id 1
+  //     card 2 id 2
+  //     card 3 id 3
+  //   ]
+
+  console.log("deckScreen -deckLoaded", deckLoaded, "cardLoaded:", cardLoaded);
   return (
-    <div>
+    <div className="flex">
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
@@ -43,22 +93,25 @@ export default async function Deck() {
           </li>
         </ol>
       </nav>
-      {/* {deckListData.map((deck, index) => ( */}
+      {/*no */}
       <div
         key="index"
         id="deck.id"
-        className="card "
-        style={{ width: "18rem" }}
+        className="card flex"
+        style={{ width: "100%" }}
       >
         {/*---Deck card render---*/}
-        <div className="card-body-9">
+        <div className="card-body">
           <h5 className="card-title">{deckLoaded.name}</h5>
           {/* <h6 className="card-subtitle mb-2 text-muted">CHangeME</h6> */}
           <p className="card-text">{deckLoaded.description}</p>
 
           <div className="row">
             {/*---Edit---*/}
-            <Link className="btn btn-secondary" to={`/decks/${deckLoaded.id}`}>
+            <Link
+              className="btn btn-secondary"
+              to={`/decks/${deckLoaded.id}/edit`}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -73,7 +126,7 @@ export default async function Deck() {
               {" Edit"}
             </Link>
             {/*---Study---*/}
-            <Link className="btn btn-primary" to={`/decks/deck.id/study`}>
+            <Link className="btn btn-primary" to={`/decks/${deckId}/study`}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"

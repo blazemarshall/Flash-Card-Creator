@@ -1,7 +1,7 @@
 // import React, { useEffect } from "react";
 // import { readDeck } from "../../utils/api";
 
-// export default function ReadDeckComp({ deckId, setLoadedDeck }) {
+// export default function ReadDeckComp({ deckId, setLoadedDeck, loadedDeck }) {
 //   useEffect(() => {
 //     const ac = new AbortController();
 
@@ -24,5 +24,6 @@
 //       ac.abort();
 //     };
 //   }, [deckId]);
+
 //   return loadedDeck;
 // }

@@ -36,7 +36,7 @@ export default function AddCard() {
   const { deckId } = params;
   const initalFormData = { front: "", back: "" };
   const [formData, setFormData] = useState({ ...initalFormData });
-
+  console.log(typeof deckId, "deckIdtype");
   useEffect(() => {
     const ac = new AbortController();
 
@@ -71,7 +71,7 @@ export default function AddCard() {
   const submitHandler = (e) => {
     e.preventDefault();
     let destination = "";
-    createCard(formData).then((response) => console.log);
+    createCard(deckId, formData).then(console.log);
     // .then(() => history.push(`/decks/${destination}`));
 
     console.log("formData:", formData);
