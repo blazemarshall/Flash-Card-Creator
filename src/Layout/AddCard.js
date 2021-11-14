@@ -70,13 +70,15 @@ export default function AddCard() {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    let destination = "";
-    createCard(deckId, formData).then(console.log);
-    // .then(() => history.push(`/decks/${destination}`));
+    // let destination = "";
+    createCard(deckId, formData)
+      .then(readDeck(deckId))
+      .then((deck) => setDeckLoad(deck));
 
-    console.log("formData:", formData);
+    setFormData(initalFormData);
+    // console.log("formData:", formData));
   };
-  console.log(deckLoad.name, "deckLoad.name");
+  // console.log(deckLoad.name, "deckLoad.name");
   return (
     <>
       <nav aria-label="breadcrumb">

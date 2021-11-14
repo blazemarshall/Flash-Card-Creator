@@ -64,7 +64,7 @@ export default function Home({ deckListData, setDeckListData }) {
           {/*---Deck card render---*/}
           <div className="card-body">
             <h5 className="card-title">{deck.name}</h5>
-            <h6 className="card-subtitle mb-2 text-muted"></h6>
+            {/* <h6 className="card-subtitle mb-2 text-muted"></h6> */}
             <p className="card-text">{deck.description}</p>
             <div className="row">
               <div className="col">

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { readDeck, readCard } from "../utils/api";
+import { readDeck, readCard, deleteCard } from "../utils/api";
 
 export default function Deck() {
   const params = useParams();
   const { deckId, cardId } = params;
   const [deckLoaded, setDeckLoaded] = useState({});
-  const [cardLoaded, setCardLoaded] = useState({});
+  const [cardsLoaded, setCardsLoaded] = useState();
 
   useEffect(() => {
     const ac = new AbortController();
@@ -24,6 +24,8 @@ export default function Deck() {
           // card
         );
         setDeckLoaded(deck);
+        setCardsLoaded(deck.cards);
+
         // setCardLoaded(card);
       } catch (error) {
         if (error.name === "AbortError") {
@@ -34,6 +36,7 @@ export default function Deck() {
       }
     }
     reloadDeck();
+
     console.log();
     // setFrontOrBackDescription(loadedDeck.cards[0].back);
     return () => {
@@ -41,48 +44,31 @@ export default function Deck() {
     };
   }, [deckId]);
 
-  // useEffect(() => {
-  //   const abortC = new AbortController();
-  //   // let deck = {};
-  //   async function loadCard() {
-  //     try {
-  //       const response = await readCard(cardId);
-  //       // const cardResponse = await readCard(cardId);
-  //       const card = await response;
-  //       // const card = await cardResponse;
-  //       console.log(
-  //         "load card",
-  //         // deck,
-  //         "card"
-  //         // card
-  //       );
-  //       setCardLoaded(card);
-  //       // setCardLoaded(card);
-  //     } catch (error) {
-  //       if (error.name === "AbortError") {
-  //         console.log("Aborted");
-  //       } else {
-  //         throw error;
-  //       }
-  //     }
-  //   }
-  //   loadCard();
-  //   console.log();
-  //   // setFrontOrBackDescription(loadedDeck.cards[0].back);
-  //   return () => {
-  //     abortC.abort();
-  //   };
-  // }, [cardId]);
-  // deck.cards.map((card)=>{})
-  //    cards:[
-  //     card 1 id 1
-  //     card 2 id 2
-  //     card 3 id 3
-  //   ]
+  const deleteCardHandler = ({ target }) => {
+    // console.log(target.value);npm
+  };
+  async function deleteTheCardHandler(cardIdToDelete) {
+    //needs to be changed to allow direct manipulation of the api data.
+    //currently only deletes from a temporary array.
+    if (window.confirm("Do you really want to quash this item?")) {
+      window.alert("Oh, you've done, did it now!");
+      await deleteCard(cardIdToDelete);
+      // .then(history.push("/"));
+      // setDeckListData(await listDecks());
+      // setCardsLoaded()
+    } else {
+      window.alert("Thank God!");
+    }
+  }
+  console.log(
+    "deckScreen -deckLoaded",
+    deckLoaded,
+    "cardsLoaded:",
+    cardsLoaded
+  );
 
-  console.log("deckScreen -deckLoaded", deckLoaded, "cardLoaded:", cardLoaded);
   return (
-    <div className="flex">
+    <div style={{ width: "100%" }}>
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
@@ -93,20 +79,34 @@ export default function Deck() {
           </li>
         </ol>
       </nav>
-      {/*no */}
-      <div
-        key="index"
-        id="deck.id"
-        className="card flex"
-        style={{ width: "100%" }}
-      >
+      {/*  */}
+      <div key="index" id="deck.id" className=" " style={{ width: "100%" }}>
         {/*---Deck card render---*/}
-        <div className="card-body">
+        <div
+          className="card-body"
+          // style={{ width: "100%" }}
+        >
           <h5 className="card-title">{deckLoaded.name}</h5>
           {/* <h6 className="card-subtitle mb-2 text-muted">CHangeME</h6> */}
           <p className="card-text">{deckLoaded.description}</p>
-
-          <div className="row">
+        </div>
+        <div
+          className="row d-flex"
+          style={
+            {
+              // width: "100%"
+            }
+          }
+        >
+          <div
+            classname=" d-flex"
+            style={{
+              // width: "100%"
+              margin: "10px",
+              justifyContent: "left",
+              display: "flex",
+            }}
+          >
             {/*---Edit---*/}
             <Link
               className="btn btn-secondary"
@@ -147,11 +147,11 @@ export default function Deck() {
               {" Study"}
             </Link>
             {/*------addCard----*/}
-            <Link class="btn btn-primary" to={`/decks/${deckId}/cards/new`}>
+            <Link class="btn btn-primary " to={`/decks/${deckId}/cards/new`}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
+                width="16"
+                height="16"
                 fill="currentColor"
                 class="bi bi-plus"
                 viewBox="1 1 16 16"
@@ -160,7 +160,16 @@ export default function Deck() {
               </svg>{" "}
               Add Cards
             </Link>
+          </div>
 
+          <div
+            className="col-6"
+            style={{
+              display: "flex",
+              justifyContent: "right",
+              margin: "10px",
+            }}
+          >
             <button
               className="btn btn-danger"
               // onClick={() => deleteButtonHandler(index)}
@@ -178,6 +187,61 @@ export default function Deck() {
             </button>
           </div>
         </div>
+      </div>
+      <div>
+        <h2>Cards</h2>
+        <ul>
+          {console.log(cardsLoaded)}
+          {cardsLoaded ? (
+            cardsLoaded.map((card) => (
+              <li className="card" key={card.id}>
+                <div className="row">
+                  <div className="col" style={{ margin: "10px" }}>
+                    <h5>Front</h5>
+                    {card.front}
+                  </div>
+                  <div className="col" style={{ margin: "10px" }}>
+                    <h5>Back</h5>
+                    {card.back}
+                  </div>
+                </div>
+                <div className="row-">
+                  <div
+                    className="col d-flex "
+                    style={{ justifyContent: "right" }}
+                  >
+                    <Link
+                      className="btn btn-secondary"
+                      style={{ margin: "5px" }}
+                      to={`/decks/${deckId}/cards/${card.id}/edit`}
+                    >
+                      Edit
+                    </Link>
+                    <button
+                      className="btn btn-danger"
+                      onClick={deleteCardHandler(card.id)}
+                      style={{ margin: "5px" }}
+                    >
+                      {" "}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        className="bi bi-trash-fill"
+                        viewBox="0 1 16 16"
+                      >
+                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </li>
+            ))
+          ) : (
+            <div></div>
+          )}
+        </ul>
       </div>
     </div>
   );
