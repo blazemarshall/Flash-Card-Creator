@@ -70,7 +70,7 @@ export default function AddCard() {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    // let destination = "";
+
     createCard(deckId, formData)
       .then(readDeck(deckId))
       .then((deck) => setDeckLoad(deck));

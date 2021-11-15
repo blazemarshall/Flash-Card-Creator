@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 import { readDeck, readCard, deleteCard } from "../utils/api";
 
 export default function Deck() {
@@ -7,16 +7,16 @@ export default function Deck() {
   const { deckId, cardId } = params;
   const [deckLoaded, setDeckLoaded] = useState({});
   const [cardsLoaded, setCardsLoaded] = useState();
-
+  const history = useHistory();
   useEffect(() => {
     const ac = new AbortController();
     // let deck = {};
     async function reloadDeck() {
       try {
         const response = await readDeck(deckId);
-        // const cardResponse = await readCard(cardId);
+
         const deck = await response;
-        // const card = await cardResponse;
+
         console.log(
           "loadDeckAsyncFunctUseeffct.deck and card",
           deck,
@@ -44,22 +44,47 @@ export default function Deck() {
     };
   }, [deckId]);
 
-  const deleteCardHandler = ({ target }) => {
-    // console.log(target.value);npm
-  };
-  async function deleteTheCardHandler(cardIdToDelete) {
-    //needs to be changed to allow direct manipulation of the api data.
-    //currently only deletes from a temporary array.
+  // useEffect(()=>
+  // const ac = new AbortController()
+
+  //  async function reloadCards(){
+  //    try{
+  //     const response = await readDeck(deckId);
+  //     const deck = await response;
+
+  //    }catch(error){
+  //      if (error.name === "AbortError") {
+  //     console.log("Aborted");
+  //   } else {
+  //     throw error;
+  //   }}
+  //  }
+  // )
+
+  const deleteCardHandler = (thisId) => {
+    console.log(thisId);
     if (window.confirm("Do you really want to quash this item?")) {
-      window.alert("Oh, you've done, did it now!");
-      await deleteCard(cardIdToDelete);
-      // .then(history.push("/"));
-      // setDeckListData(await listDecks());
-      // setCardsLoaded()
-    } else {
-      window.alert("Thank God!");
+      deleteCard(thisId);
+      readDeck(deckId);
+      // .then((response) => ))
+      // .then(() => setCardsLoaded(response));
+      // setCardsLoaded(
     }
-  }
+    history.go(0);
+  };
+  // async function eleteTheCardHandler(cardIdToDelete) {
+  //   //needs to be changed to allow direct manipulation of the api data.
+  //   //currently only deletes from a temporary array.
+  //   {
+  //     window.alert("Oh, you've done, did it now!");
+  //     await deleteCard(cardIdToDelete);
+  //     // .then(history.push("/"));
+  //     // setDeckListData(await listDecks());
+  //     // setCardsLoaded()
+  //   } else {
+  //     window.alert("Thank God!");
+  //   }
+  // }
   console.log(
     "deckScreen -deckLoaded",
     deckLoaded,
@@ -191,9 +216,9 @@ export default function Deck() {
       <div>
         <h2>Cards</h2>
         <ul>
-          {console.log(cardsLoaded)}
+          {/* {console.log(cardsLoaded)} */}
           {cardsLoaded ? (
-            cardsLoaded.map((card) => (
+            cardsLoaded.map((card, index) => (
               <li className="card" key={card.id}>
                 <div className="row">
                   <div className="col" style={{ margin: "10px" }}>
@@ -219,7 +244,7 @@ export default function Deck() {
                     </Link>
                     <button
                       className="btn btn-danger"
-                      onClick={deleteCardHandler(card.id)}
+                      onClick={() => deleteCardHandler(card.id)}
                       style={{ margin: "5px" }}
                     >
                       {" "}
