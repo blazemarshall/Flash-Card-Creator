@@ -15,6 +15,10 @@ function Layout() {
   // const { toggleFrontOrBack, setToggleFrontOrBack } = useState("false");
   const [deckListData, setDeckListData] = useState([]);
 
+  const initalFormData = { name: "", description: "" };
+
+  const [formData, setFormData] = useState({ ...initalFormData });
+
   return (
     <>
       <Header />
@@ -44,7 +48,11 @@ function Layout() {
             />
           </Route>
           <Route path="/decks/new">
-            <CreateDeck setDeckListData={setDeckListData} />
+            <CreateDeck
+              formData={formData}
+              setFormData={setFormData}
+              initalFormData={initalFormData}
+            />
           </Route>
           <Route exact path="/decks/:deckId">
             <Deck />

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { createDeck } from "../utils/api";
+import DeckForm from "./common/DeckForm";
 /* allows the user to create a new deck
     location: /decks/new
 
@@ -19,12 +20,8 @@ can be multiple lines of text.
 If the user clicks "submit", the user is taken to the Deck screen.
 If the user clicks "cancel", the user is taken to the Home screen.
 */
-export default function CreateDeck() {
+export default function CreateDeck({ formData, setFormData }) {
   const history = useHistory();
-
-  const initalFormData = { name: "", description: "" };
-
-  const [formData, setFormData] = useState({ ...initalFormData });
 
   const changeHandler = ({ target }) => {
     setFormData({
@@ -44,6 +41,8 @@ export default function CreateDeck() {
   };
   return (
     <div>
+      <DeckForm formData={formData} setFormData={setFormData} />
+
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
