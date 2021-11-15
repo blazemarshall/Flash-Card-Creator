@@ -20,12 +20,13 @@ can be multiple lines of text.
 If the user clicks "submit", the user is taken to the Deck screen.
 If the user clicks "cancel", the user is taken to the Home screen.
 */
-export default function CreateDeck({ formData, setFormData }) {
+export default function CreateDeck({ deckFormData, setDeckFormData }) {
   const history = useHistory();
+  const createScreen = true;
 
   const changeHandler = ({ target }) => {
-    setFormData({
-      ...formData,
+    setDeckFormData({
+      ...deckFormData,
       [target.name]: target.value,
     });
   };
@@ -33,17 +34,23 @@ export default function CreateDeck({ formData, setFormData }) {
   const submitHandler = (e) => {
     e.preventDefault();
     let destination = "";
-    createDeck(formData)
+    createDeck(deckFormData)
       .then((response) => (destination = response.id))
       .then(() => history.push(`/decks/${destination}`));
 
-    console.log("formData:", formData);
+    console.log("formData:", deckFormData);
   };
   return (
     <div>
-      <DeckForm formData={formData} setFormData={setFormData} />
+      <DeckForm
+        deckFormData={deckFormData}
+        setDeckFormData={setDeckFormData}
+        submitHandler={submitHandler}
+        changeHandler={changeHandler}
+        createScreen={createScreen}
+      />
 
-      <nav aria-label="breadcrumb">
+      {/* <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
             <Link to="/">Home</Link>
@@ -92,6 +99,7 @@ export default function CreateDeck({ formData, setFormData }) {
           </div>
         </div>
       </form>
+    </div> */}
     </div>
   );
 }

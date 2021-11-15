@@ -3,9 +3,13 @@ import { Link } from "react-router-dom";
 export default function DeckForm({
   changeHandler,
   submitHandler,
-  formData,
+  deckFormData,
   createScreen,
+  setDeckFormData,
 }) {
+  // if (createScreen) {
+  //   setDeckFormData();
+  // }
   return (
     <div>
       <nav aria-label="breadcrumb">
@@ -18,7 +22,7 @@ export default function DeckForm({
           </li>
         </ol>
       </nav>
-      <h1>Create Deck{createScreen ? "Create Deck" : "Edit Deck"}</h1>
+      <h1>{createScreen ? "Create Deck" : "Edit Deck"}</h1>
       <form onSubmit={submitHandler}>
         <div class="mb-3">
           <label htmlFor="name" class="form-label">
@@ -31,7 +35,7 @@ export default function DeckForm({
             id="name"
             placeholder="Deck Name"
             onChange={changeHandler}
-            value={formData.name}
+            value={deckFormData.name}
           />
         </div>
         <div class="mb-3">
@@ -44,7 +48,7 @@ export default function DeckForm({
             className="form-control"
             id="description"
             rows="3"
-            value={formData.description}
+            value={deckFormData.description}
             onChange={changeHandler}
           ></textarea>
           <div>

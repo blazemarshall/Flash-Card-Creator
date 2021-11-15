@@ -15,10 +15,10 @@ function Layout() {
   // const { toggleFrontOrBack, setToggleFrontOrBack } = useState("false");
   const [deckListData, setDeckListData] = useState([]);
 
-  const initalFormData = { name: "", description: "" };
-
-  const [formData, setFormData] = useState({ ...initalFormData });
-
+  const initialCardFormData = { name: "", description: "" };
+  const initialDeckFormData = { deckId: "", cardId: "", front: "", back: "" };
+  const [cardFormData, setCardFormData] = useState({ ...initialCardFormData });
+  const [deckFormData, setDeckFormData] = useState({ ...initialDeckFormData });
   return (
     <>
       <Header />
@@ -46,16 +46,19 @@ function Layout() {
           </Route>
           <Route path="/decks/new">
             <CreateDeck
-              formData={formData}
-              setFormData={setFormData}
-              initalFormData={initalFormData}
+              deckFormData={deckFormData}
+              setDeckFormData={setDeckFormData}
+              initialFormData={initialDeckFormData}
             />
           </Route>
           <Route exact path="/decks/:deckId">
             <Deck />
           </Route>
           <Route path="/decks/:deckId/edit">
-            <EditDeck />
+            <EditDeck
+              deckFormData={deckFormData}
+              setDeckFormData={setDeckFormData}
+            />
           </Route>
           <Route path="/decks/:deckId/cards/new">
             <AddCard />

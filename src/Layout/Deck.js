@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
-import { readDeck, readCard, deleteCard } from "../utils/api";
+import {
+  readDeck,
+  readCard,
+  deleteCard,
+  deleteDeck,
+  listDecks,
+} from "../utils/api";
 
 export default function Deck() {
   const params = useParams();
@@ -44,23 +50,17 @@ export default function Deck() {
     };
   }, [deckId]);
 
-  // useEffect(()=>
-  // const ac = new AbortController()
-
-  //  async function reloadCards(){
-  //    try{
-  //     const response = await readDeck(deckId);
-  //     const deck = await response;
-
-  //    }catch(error){
-  //      if (error.name === "AbortError") {
-  //     console.log("Aborted");
-  //   } else {
-  //     throw error;
-  //   }}
-  //  }
-  // )
-
+  async function deleteButtonHandler(indexToDelete) {
+    //needs to be changed to allow direct manipulation of the api data.
+    //currently only deletes from a temporary array.
+    if (window.confirm("Do you really want to quash this item?")) {
+      window.alert("Oh, you've done, did it now!");
+      await deleteDeck(indexToDelete).then(history.push("/"));
+      setDeckListData(await listDecks());
+    } else {
+      window.alert("Thank God!");
+    }
+  }
   const deleteCardHandler = (thisId) => {
     console.log(thisId);
     if (window.confirm("Do you really want to quash this item?")) {
@@ -69,8 +69,9 @@ export default function Deck() {
       // .then((response) => ))
       // .then(() => setCardsLoaded(response));
       // setCardsLoaded(
+
+      history.go(0);
     }
-    history.go(0);
   };
   // async function eleteTheCardHandler(cardIdToDelete) {
   //   //needs to be changed to allow direct manipulation of the api data.
@@ -197,7 +198,7 @@ export default function Deck() {
           >
             <button
               className="btn btn-danger"
-              // onClick={() => deleteButtonHandler(index)}
+              onClick={() => deleteButtonHandler(deckId)}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
