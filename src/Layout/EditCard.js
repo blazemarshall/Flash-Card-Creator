@@ -24,11 +24,15 @@ If the user clicks on either "Save" or "Cancel", the user
 export default function EditCard() {
   const history = useHistory();
   const [deckLoad, setDeckLoad] = useState({});
-  const params = useParams();
-  const { deckId } = params;
-  const initalFormData = { front: "", back: "" };
-  const [formData, setFormData] = useState({ ...initalFormData });
   const [thisCard, setThisCard] = useState({});
+  const params = useParams();
+  const { deckId, cardId } = params;
+  const [initialFormData, setInitialFormData] = useState({
+    front: "",
+    back: "",
+  });
+  const [formData, setFormData] = useState({ ...initialFormData });
+
   console.log(typeof deckId, "deckIdtype");
 
   useEffect(() => {
@@ -37,9 +41,19 @@ export default function EditCard() {
     async function loaderDeck() {
       try {
         const response = await readDeck(deckId);
-        const deck = await response;
-        console.log("loadDeckAsyncFunctUseeffct.deck", deck);
+        const deck = response;
+        const cardResponse = await readCard(cardId);
+        const card = cardResponse;
+        console.log("loadDeckAsyncFunctUseeffct.deck", deck, "card", card);
         setDeckLoad(deck);
+        setThisCard(card);
+        // setInitialFormData({...initialFormdata,front})
+        setFormData({
+          front: card.front,
+          back: card.back,
+          id: card.id,
+          deckId: card.deckId,
+        });
       } catch (error) {
         if (error.name === "AbortError") {
           console.log("Aborted");
@@ -53,7 +67,7 @@ export default function EditCard() {
     return () => {
       ac.abort();
     };
-  }, [deckId]);
+  }, [deckId, cardId]);
   const changeHandler = ({ target }) => {
     setFormData({
       ...formData,
@@ -64,8 +78,7 @@ export default function EditCard() {
   const submitHandler = (e) => {
     e.preventDefault();
     let destination = "";
-    // Card(deckId, formData).then(console.log);
-    // .then(() => history.push(`/decks/${destination}`));
+    updateCard(formData).then(() => history.push(`/decks/${deckId}`));
 
     console.log("formData:", formData);
   };
@@ -77,14 +90,16 @@ export default function EditCard() {
             <Link to="/">Home</Link>
           </li>
           <li class="breadcrumb-item">
-            <Link to={`/decks/${deckId}`}></Link>
+            <Link to={`/decks/${deckId}`}>{deckLoad.name}</Link>
           </li>
           <li class="breadcrumb-item active" aria-current="page">
-            {/* {location} */}
+            Edit Card: {cardId}
           </li>
         </ol>
       </nav>
-      <h1>{deckLoad.name}: Add Card</h1>
+      <h1>
+        {deckLoad.name}: Edit Card: {cardId}
+      </h1>
       <form onSubmit={submitHandler}>
         <div class="mb-3">
           <label htmlFor="name" class="form-label">
@@ -116,7 +131,7 @@ export default function EditCard() {
           ></textarea>
           <div className="row ">
             <div>
-              <Link to="/" class="btn btn-secondary">
+              <Link to={`/decks/${deckId}`} class="btn btn-secondary">
                 Done
               </Link>
             </div>

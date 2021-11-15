@@ -127,7 +127,7 @@ export default function AddCard() {
           ></textarea>
           <div className="row ">
             <div>
-              <Link to="/" class="btn btn-secondary">
+              <Link to={`/decks/${deckId}`} class="btn btn-secondary">
                 Done
               </Link>
             </div>

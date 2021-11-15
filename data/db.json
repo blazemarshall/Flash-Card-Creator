@@ -43,34 +43,22 @@
       "id": 10
     },
     {
-      "front": "a",
-      "back": "b",
-      "deckId": 2,
-      "id": 11
-    },
-    {
       "front": "",
       "back": "",
       "deckId": 2,
       "id": 12
     },
     {
-      "front": "c",
-      "back": "c",
-      "deckId": 1,
-      "id": 23
+      "front": "wonkeys",
+      "back": "wonders",
+      "id": 28,
+      "deckId": 1
     },
     {
-      "front": "asdf",
-      "back": "asdf",
+      "front": "fdsa",
+      "back": "fdsa",
       "deckId": 1,
-      "id": 24
-    },
-    {
-      "front": "bfdssdfa",
-      "back": "asdfsdfb",
-      "deckId": 1,
-      "id": 25
+      "id": 30
     }
   ]
 }

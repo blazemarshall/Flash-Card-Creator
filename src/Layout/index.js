@@ -42,10 +42,7 @@ function Layout() {
             />
           </Route>
           <Route path="/decks/:deckId/study">
-            <Study
-              deckListData={deckListData}
-              setDeckListData={setDeckListData}
-            />
+            <Study />
           </Route>
           <Route path="/decks/new">
             <CreateDeck
