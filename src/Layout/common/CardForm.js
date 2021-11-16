@@ -2,11 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 export default function CardForm({
-  cardId,
   deckId,
-  placeHolder1,
-  placeHolder2,
-
   changeHandlerForAdd,
   changeHandlerForEdit,
   submitHandlerForAdd,
@@ -15,6 +11,9 @@ export default function CardForm({
   formDataForAdd,
   formDataForEdit,
 }) {
+  //---------------------------------------------------------------------------------------------------
+  //--------Logic to determine actions based on whether it's the create screen or not.------------------
+  //---------------------------------------------------------------------------------------------------
   let frontValueHandler = addCardScreen
     ? formDataForAdd.front
     : formDataForEdit.front;
@@ -26,7 +25,7 @@ export default function CardForm({
   let changeHandler = addCardScreen
     ? changeHandlerForAdd
     : changeHandlerForEdit;
-
+  //====================================================================================================
   return (
     <div>
       <form

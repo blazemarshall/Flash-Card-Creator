@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { readDeck, updateDeck } from "../utils/api";
-import DeckForm from "./common/DeckForm";
+import { readDeck, updateDeck } from "../../utils/api";
+import DeckForm from "../common/DeckForm";
 import { Link, useHistory, useParams } from "react-router-dom";
 
 export default function EditDeck({}) {
@@ -10,8 +10,9 @@ export default function EditDeck({}) {
   );
   const history = useHistory();
   const { deckId } = useParams();
-  const createScreen = false;
-  console.log("deckEdit,deckFormDataForEdit", deckFormDataForEdit);
+  const [createScreen, setCreateScreen] = useState(false);
+  // console.log("deckEdit,deckFormDataForEdit", deckFormDataForEdit);
+
   const changeHandlerForEdit = ({ target }) => {
     setDeckFormDataForEdit({
       ...deckFormDataForEdit,
@@ -54,11 +55,13 @@ export default function EditDeck({}) {
   return (
     <div>
       <DeckForm
-        deckFormDataForEdit={deckFormDataForEdit}
-        setDeckFormDataForEdit={setDeckFormDataForEdit}
         changeHandlerForEdit={changeHandlerForEdit}
         submitHandlerForEdit={submitHandlerForEdit}
         createScreen={createScreen}
+        descriptionValue={deckFormDataForEdit.description}
+        nameValue={deckFormDataForEdit.name}
+        deckFormDataForEdit={deckFormDataForEdit}
+        setDeckFormDataForEdit={setDeckFormDataForEdit}
       />
     </div>
   );

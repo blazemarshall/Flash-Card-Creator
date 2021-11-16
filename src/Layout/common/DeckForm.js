@@ -1,30 +1,28 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useHistory } from "react-router-dom";
+import { createDeck, updateDeck } from "../../utils/api";
 
 export default function DeckForm({
-  changeHandlerForCreate,
-  changeHandlerForEdit,
-  submitHandlerForCreate,
-  submitHandlerForEdit,
-  deckFormDataForCreate,
   createScreen,
-  setDeckFormData,
-  initialDeckFormData,
-  setDeckFormDataForEdit,
+  deckFormDataForCreate,
   deckFormDataForEdit,
+  changeHandlerForCreate,
+  submitHandlerForCreate,
+  changeHandlerForEdit,
+  submitHandlerForEdit,
 }) {
-  let changeHandler = createScreen
-    ? changeHandlerForCreate
-    : changeHandlerForEdit;
-  let submitHandler = createScreen
-    ? submitHandlerForCreate
-    : submitHandlerForEdit;
-  let nameValueHandler = createScreen
-    ? deckFormDataForCreate.name
-    : deckFormDataForEdit.name;
-  let descriptionValueHandler = createScreen
-    ? deckFormDataForCreate.description
-    : deckFormDataForEdit.description;
+  //-----------Logic to determine actions based on whether its the CreateDeck Screen.
+  let name = "";
+  let description = "";
 
+  if (createScreen) {
+    name = deckFormDataForCreate.name;
+    description = deckFormDataForCreate.description;
+  } else {
+    name = deckFormDataForEdit.name;
+    description = deckFormDataForEdit.description;
+  }
+  //------------------------------------------------------------------------------------
   return (
     <div>
       <nav aria-label="breadcrumb">
@@ -38,7 +36,9 @@ export default function DeckForm({
         </ol>
       </nav>
       <h1>{createScreen ? "Create Deck" : "Edit Deck"}</h1>
-      <form onSubmit={submitHandler}>
+      <form
+        onSubmit={createScreen ? submitHandlerForCreate : submitHandlerForEdit}
+      >
         <div className="mb-3">
           <label htmlFor="name" className="form-label">
             Name
@@ -49,8 +49,10 @@ export default function DeckForm({
             className="form-control"
             id="name"
             placeholder="Deck Name"
-            onChange={changeHandler}
-            value={nameValueHandler}
+            onChange={
+              createScreen ? changeHandlerForCreate : changeHandlerForEdit
+            }
+            value={name}
           />
         </div>
         <div className="mb-3">
@@ -63,8 +65,10 @@ export default function DeckForm({
             className="form-control"
             id="description"
             rows="3"
-            value={descriptionValueHandler}
-            onChange={changeHandler}
+            value={description}
+            onChange={
+              createScreen ? changeHandlerForCreate : changeHandlerForEdit
+            }
           ></textarea>
           <div>
             <Link to="/" className="btn btn-secondary">

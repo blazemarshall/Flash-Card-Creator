@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { Route, Switch, Link } from "react-router-dom";
 import Header from "./common/Header";
 
-import Home from "./Home";
+import Home from "./Home/Home";
 import Study from "./Study/Study.js";
-import CreateDeck from "./CreateDeck";
-import Deck from "./Deck";
-import EditDeck from "./EditDeck";
-import AddCard from "./AddCard";
-import EditCard from "./EditCard";
+import CreateDeck from "./DecksForm/CreateDeck.js";
+import Deck from "./Deck.js";
+import EditDeck from "./DecksForm/EditDeck.js";
+import AddCard from "./Cards/AddCard.js";
+import EditCard from "./Cards/EditCard.js";
 import NotFound from "./NotFound";
 
 function Layout() {

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { Link, useHistory } from "react-router-dom";
-import { readDeck } from "../utils/api";
+import { readDeck } from "../../utils/api";
 
-import { createCard } from "../utils/api";
-import BreadCrumbs from "./common/BreadCrumbs";
-import CardForm from "./common/CardForm";
+import { createCard } from "../../utils/api";
+import BreadCrumbs from "../common/BreadCrumbs";
+import CardForm from "../common/CardForm";
 /* 
 allows the user to add a new card to an existing deck
    location: /decks/:deckId/cards/new
@@ -39,6 +39,8 @@ export default function AddCard() {
   const initalFormData = { front: "", back: "" };
   const [formDataForAdd, setFormDataForAdd] = useState({ ...initalFormData });
   console.log(typeof deckId, "deckIdtype");
+
+  //-----loads the current deck-------------------------
   useEffect(() => {
     const ac = new AbortController();
 
@@ -62,7 +64,7 @@ export default function AddCard() {
       ac.abort();
     };
   }, [deckId]);
-
+  //-------Change and Submit Handlers-------------------------------------
   const changeHandlerForAdd = ({ target }) => {
     setFormDataForAdd({
       ...formDataForAdd,
@@ -73,14 +75,13 @@ export default function AddCard() {
   const submitHandlerForAdd = (e) => {
     e.preventDefault();
 
-    createCard(deckId, formDataForAdd)
-      .then(readDeck(deckId))
-      .then((deck) => setDeckLoad(deck));
+    createCard(deckId, formDataForAdd).then(readDeck(deckId));
+    // .then((deck) => setDeckLoad(deck));
 
     setFormDataForAdd(initalFormData);
     // console.log("formDataForAdd:", formDataForAdd));
   };
-
+  //Component Dependant Variables---------------------------------------
   const deckName = deckLoad.name;
   const componentType = "triple";
   const currentLocation = "Add Card";
@@ -89,7 +90,7 @@ export default function AddCard() {
   const placeHolder1 = "Front side of card";
   const placeHolder2 = "Back side of card";
   return (
-    <>
+    <div>
       <BreadCrumbs
         componentType={componentType}
         deckId={deckId}
@@ -107,51 +108,6 @@ export default function AddCard() {
         placeHolder2={placeHolder2}
         deckId={deckId}
       />
-      {/** must  create form component that is shared between create deck */}
-
-      {/* <form onSubmit={submitHandler}>
-        <div className="mb-3">
-          <label htmlFor="name" className="form-label">
-            Front
-          </label>
-          <textarea
-            name="front"
-            type="text"
-            rows="2"
-            className="form-control"
-            id="front"
-            placeholder="Front side of card"
-            onChange={changeHandler}
-            value={formDataForAdd.front}
-          ></textarea>
-        </div>
-        <div class="mb-3">
-          <label htmlFor="description" class="form-label">
-            back
-          </label>
-          <textarea
-            name="back"
-            placeholder="Back side of card"
-            className="form-control"
-            id="back"
-            rows="2"
-            value={formDataForAdd.back}
-            onChange={changeHandler}
-          ></textarea>
-          <div className="row ">
-            <div>
-              <Link to={`/decks/${deckId}`} className="btn btn-secondary">
-                Done
-              </Link>
-            </div>
-            <div>
-              <button type="submit" className="btn btn-primary">
-                Save
-              </button>
-            </div>
-          </div>
-        </div>
-      </form> */}
-    </>
+    </div>
   );
 }
