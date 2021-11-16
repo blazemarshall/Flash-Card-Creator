@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { readDeck, updateDeck } from "../../utils/api";
 import DeckForm from "../common/DeckForm";
-import { Link, useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
-export default function EditDeck({}) {
-  const [deckFormDataForEdit, setDeckFormDataForEdit] = useState(
-    {}
-    // readDeck(deckId)
-  );
+export default function EditDeck() {
+  const [deckFormDataForEdit, setDeckFormDataForEdit] = useState({});
   const history = useHistory();
   const { deckId } = useParams();
   const [createScreen, setCreateScreen] = useState(false);
-  // console.log("deckEdit,deckFormDataForEdit", deckFormDataForEdit);
 
   const changeHandlerForEdit = ({ target }) => {
     setDeckFormDataForEdit({
@@ -26,8 +22,6 @@ export default function EditDeck({}) {
     updateDeck(deckFormDataForEdit)
       .then((response) => (destination = response.id))
       .then(() => history.push(`/decks/${destination}`));
-
-    console.log("deckFormDataForEdit:", deckFormDataForEdit);
   };
   useEffect(() => {
     const ac = new AbortController();
@@ -36,7 +30,7 @@ export default function EditDeck({}) {
       try {
         const response = await readDeck(deckId);
         const deck = response;
-        console.log("loadDeckAsyncFunctUseeffct.deck", deck);
+
         // setLoadedDeck(deck);
         setDeckFormDataForEdit(deck);
       } catch (error) {

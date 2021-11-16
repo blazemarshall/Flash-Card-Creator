@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { readDeck } from "../../utils/api";
 import BreadCrumbs from "../common/BreadCrumbs";
 import CardRender from "./CardRender";
@@ -27,7 +27,7 @@ export default function Study() {
       try {
         const response = await readDeck(deckId);
         const deck = await response;
-        console.log("loadDeckAsyncFunctUseeffct.deck", deck);
+
         setLoadedDeckForStudy(deck);
       } catch (error) {
         if (error.name === "AbortError") {
@@ -44,11 +44,9 @@ export default function Study() {
     };
   }, [deckId]);
 
-  const { cards, name } = loadedDeckForStudy;
-
+  const { cards } = loadedDeckForStudy;
   let frontOrBackDescription = "";
-  console.log(front);
-  console.log("Front or back Desc", frontOrBackDescription);
+
   //---------handles flip button for cards---------
   const flipHandler = () => {
     setFront(!front);

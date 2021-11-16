@@ -28,7 +28,7 @@ export default function EditCard() {
         const deck = response;
         const cardResponse = await readCard(cardId);
         const card = cardResponse;
-        console.log("loadDeckAsyncFunctUseeffct.deck", deck, "card", card);
+
         setDeckLoad(deck);
         setThisCard(card);
         setFormDataForEdit({
@@ -62,10 +62,7 @@ export default function EditCard() {
 
   const submitHandlerForEdit = (e) => {
     e.preventDefault();
-    let destination = "";
     updateCard(formDataForEdit).then(() => history.push(`/decks/${deckId}`));
-
-    console.log("formDataForEdit:", formDataForEdit);
   };
 
   //------Component Dependant Variables--------------------------------

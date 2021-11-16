@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Route, Switch, Link } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import Header from "./common/Header";
 
 import Home from "./Home/Home";
@@ -12,7 +12,6 @@ import EditCard from "./Cards/EditCard.js";
 import NotFound from "./NotFound";
 
 function Layout() {
-  // const { toggleFrontOrBack, setToggleFrontOrBack } = useState("false");
   const [deckListData, setDeckListData] = useState([]);
 
   const [initialDeckFormData, setInitialDeckFormData] = useState({
@@ -22,22 +21,11 @@ function Layout() {
   const initialCardFormData = { deckId: "", cardId: "", front: "", back: "" };
   const [cardFormData, setCardFormData] = useState({ ...initialCardFormData });
   const [deckFormData, setDeckFormData] = useState({ ...initialDeckFormData });
-  console.log("Index,DeckformData", deckFormData);
+
   return (
-    <>
+    <div>
       <Header />
       <div className="container">
-        <div>{/*  <Link to="/">Home</Link>*/}</div>
-        {/* TODO: Implement the screen starting here 
-            //home
-            //study
-            //createDeck
-            //Deck
-            //Edit Deck
-            //Add Card
-            //Edit Card
-
-              */}
         <Switch>
           <Route exact path="/">
             <Home
@@ -80,7 +68,7 @@ function Layout() {
           </Route>
         </Switch>
       </div>
-    </>
+    </div>
   );
 }
 

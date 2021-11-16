@@ -1,6 +1,5 @@
-import { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
-import { createDeck, updateDeck } from "../../utils/api";
+import React from "react";
+import { Link } from "react-router-dom";
 
 export default function DeckForm({
   createScreen,

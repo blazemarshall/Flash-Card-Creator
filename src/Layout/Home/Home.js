@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import React from "react";
+import { useEffect } from "react";
 import { deleteDeck, listDecks } from "../../utils/api";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import HomeDeckRender from "./HomeDeckRender";
 
 export default function Home({
@@ -12,8 +13,6 @@ export default function Home({
   const history = useHistory();
 
   async function deleteButtonHandler(indexToDelete) {
-    //needs to be changed to allow direct manipulation of the api data.
-    //currently only deletes from a temporary array.
     if (window.confirm("Do you really want to quash this item?")) {
       window.alert("Oh, you've done, did it now!");
       await deleteDeck(indexToDelete).then(history.push("/"));
@@ -38,11 +37,10 @@ export default function Home({
     }
     loadDecks();
     return () => {
-      // console.log("cleanup");
       ac.abort();
     };
   }, []);
-  // console.log("Home-ln49-deckListdata:", deckListData);
+
   const createButtonHandler = () => {
     history.push("/decks/new");
     setDeckFormData(initialDeckFormData);
