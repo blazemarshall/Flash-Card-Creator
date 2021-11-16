@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { readDeck } from "../../utils/api";
-// import ReadDeckComp from "../common/ReadDeckComp";
-// import FrontFunction from "./FrontFunction";
-// import NextHandler from "./NextHandler";
+import BreadCrumbs from "../common/BreadCrumbs";
+
 export default function Study() {
   //-----------hook Variables------------------
   const [front, setFront] = useState(true);
   const [clickNumber, setClickNumber] = useState(1);
   const { deckId } = useParams();
   const [currentCard, setCurrentCard] = useState(0);
-  const [loadedDeck, setLoadedDeck] = useState({
+  const [loadedDeckForStudy, setLoadedDeckForStudy] = useState({
     cards: [{ front: "", back: "" }],
   });
 
@@ -19,7 +18,7 @@ export default function Study() {
   const history = useHistory();
 
   //-------------------------readDeck useEffectHook function -------------------
-  // <ReadDeckComp deckId={deckId} setLoadedDeck={setLoadedDeck} />;
+
   useEffect(() => {
     const ac = new AbortController();
 
@@ -28,7 +27,7 @@ export default function Study() {
         const response = await readDeck(deckId);
         const deck = await response;
         console.log("loadDeckAsyncFunctUseeffct.deck", deck);
-        setLoadedDeck(deck);
+        setLoadedDeckForStudy(deck);
       } catch (error) {
         if (error.name === "AbortError") {
           console.log("Aborted");
@@ -45,7 +44,7 @@ export default function Study() {
   }, [deckId]);
 
   //destructures loadedDeck into card list of card objects and the name of deck.
-  const { cards, name } = loadedDeck;
+  const { cards, name } = loadedDeckForStudy;
 
   //without frontOrBack as a variable; the cards do not display the front text on load.
   let frontOrBackDescription = "";
@@ -54,29 +53,7 @@ export default function Study() {
   //---------handles flip button for cards---------
   const flipHandler = () => {
     setFront(!front);
-
-    //Tried to componentize without success.
-    // FrontFunction(
-    //   front,
-    //   setFrontOrBackDescription,
-    //   setFrontOrBackText,
-    //   cards,
-    //   currentCard
-    // );
-    // setFront(!front);
   };
-
-  //---------handles next button for cards----------
-  //Tried to componentize without success.
-  // <NextHandler
-  //   setFront={setFront}
-  //   cards={cards}
-  //   setCurrentCard={setCurrentCard}
-  //   setClickNumber={setClickNumber}
-  //   currentCard={currentCard}
-  //   clickNumber={clickNumber}
-  //   history={history}
-  // />;
 
   const nextHandler = () => {
     setFront(true);
@@ -105,34 +82,32 @@ export default function Study() {
   if (!cards) {
     return null;
   }
-  if (front) {
-    frontOrBackDescription = cards[currentCard].front;
-    frontOrBackText = "Front";
-  } else {
-    frontOrBackDescription = cards[currentCard].back;
-    frontOrBackText = "Back";
+  if (cards.length > 0) {
+    if (front) {
+      frontOrBackDescription = cards[currentCard].front;
+      frontOrBackText = "Front";
+    } else {
+      frontOrBackDescription = cards[currentCard].back;
+      frontOrBackText = "Back";
+    }
   }
+  const deckName = loadedDeckForStudy.name;
+  const componentType = "triple";
+  const currentLocation = "Study";
+  const deckLoc = `/decks/${deckId}`;
   return (
     <>
-      <nav aria-label="breadcrumb">
-        {/*breadCrumbNav */}
-        <ol className="breadcrumb">
-          <li className="breadcrumb-item">
-            <Link to="/">Home</Link>
-          </li>
-          <li className="breadcrumb-item">
-            <Link to={`/decks/${deckId}`}>{name}</Link>
-          </li>
-          <li className="breadcrumb-item active" aria-current="page">
-            Study
-          </li>
-        </ol>{" "}
-        {/*breadCrumbNav*/}
-      </nav>
-      <h1>Study:{loadedDeck.name}</h1>
+      <BreadCrumbs
+        componentType={componentType}
+        deckId={deckId}
+        deckName={deckName}
+        currentLocation={currentLocation}
+        deckLoc={deckLoc}
+      />
+      <h1>Study:{loadedDeckForStudy.name}</h1>
 
       <div className="card" style={{ width: "18rem" }}>
-        {cards.length <= 2 ? (
+        {cards.length <= 2 && cards.length >= 0 ? (
           <div className="card-body">
             <h5 className="card-title">Not enough cards</h5>
             <h6 className="card-subtitle mb-2 text-muted">

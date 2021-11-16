@@ -4,6 +4,8 @@ import { Link, useHistory } from "react-router-dom";
 import { readDeck } from "../utils/api";
 
 import { createCard } from "../utils/api";
+import BreadCrumbs from "./common/BreadCrumbs";
+import CardForm from "./common/CardForm";
 /* 
 allows the user to add a new card to an existing deck
    location: /decks/:deckId/cards/new
@@ -35,7 +37,7 @@ export default function AddCard() {
   const params = useParams();
   const { deckId } = params;
   const initalFormData = { front: "", back: "" };
-  const [formData, setFormData] = useState({ ...initalFormData });
+  const [formDataForAdd, setFormDataForAdd] = useState({ ...initalFormData });
   console.log(typeof deckId, "deckIdtype");
   useEffect(() => {
     const ac = new AbortController();
@@ -61,44 +63,55 @@ export default function AddCard() {
     };
   }, [deckId]);
 
-  const changeHandler = ({ target }) => {
-    setFormData({
-      ...formData,
+  const changeHandlerForAdd = ({ target }) => {
+    setFormDataForAdd({
+      ...formDataForAdd,
       [target.name]: target.value,
     });
   };
 
-  const submitHandler = (e) => {
+  const submitHandlerForAdd = (e) => {
     e.preventDefault();
 
-    createCard(deckId, formData)
+    createCard(deckId, formDataForAdd)
       .then(readDeck(deckId))
       .then((deck) => setDeckLoad(deck));
 
-    setFormData(initalFormData);
-    // console.log("formData:", formData));
+    setFormDataForAdd(initalFormData);
+    // console.log("formDataForAdd:", formDataForAdd));
   };
-  // console.log(deckLoad.name, "deckLoad.name");
+
+  const deckName = deckLoad.name;
+  const componentType = "triple";
+  const currentLocation = "Add Card";
+  const deckLoc = `/decks/${deckId}`;
+  const addCardScreen = true;
+  const placeHolder1 = "Front side of card";
+  const placeHolder2 = "Back side of card";
   return (
     <>
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <Link to="/">Home</Link>
-          </li>
-          <li class="breadcrumb-item">
-            <Link to={`/deck/${deckId}`}>{deckLoad.name}</Link>
-          </li>
-          <li class="breadcrumb-item active" aria-current="page">
-            Add Card
-          </li>
-        </ol>
-      </nav>
-      {/** must  create form component that is shared between create deck */}
+      <BreadCrumbs
+        componentType={componentType}
+        deckId={deckId}
+        deckName={deckName}
+        currentLocation={currentLocation}
+        deckLoc={deckLoc}
+      />
       <h1>{deckLoad.name}: Add Card</h1>
-      <form onSubmit={submitHandler}>
-        <div class="mb-3">
-          <label htmlFor="name" class="form-label">
+      <CardForm
+        formDataForAdd={formDataForAdd}
+        addCardScreen={addCardScreen}
+        changeHandlerForAdd={changeHandlerForAdd}
+        submitHandlerForAdd={submitHandlerForAdd}
+        placeHolder1={placeHolder1}
+        placeHolder2={placeHolder2}
+        deckId={deckId}
+      />
+      {/** must  create form component that is shared between create deck */}
+
+      {/* <form onSubmit={submitHandler}>
+        <div className="mb-3">
+          <label htmlFor="name" className="form-label">
             Front
           </label>
           <textarea
@@ -109,7 +122,7 @@ export default function AddCard() {
             id="front"
             placeholder="Front side of card"
             onChange={changeHandler}
-            value={formData.front}
+            value={formDataForAdd.front}
           ></textarea>
         </div>
         <div class="mb-3">
@@ -122,23 +135,23 @@ export default function AddCard() {
             className="form-control"
             id="back"
             rows="2"
-            value={formData.back}
+            value={formDataForAdd.back}
             onChange={changeHandler}
           ></textarea>
           <div className="row ">
             <div>
-              <Link to={`/decks/${deckId}`} class="btn btn-secondary">
+              <Link to={`/decks/${deckId}`} className="btn btn-secondary">
                 Done
               </Link>
             </div>
             <div>
-              <button type="submit" class="btn btn-primary">
+              <button type="submit" className="btn btn-primary">
                 Save
               </button>
             </div>
           </div>
         </div>
-      </form>
+      </form> */}
     </>
   );
 }

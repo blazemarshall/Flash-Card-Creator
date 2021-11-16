@@ -2,7 +2,12 @@ import { useState, useEffect } from "react";
 import { deleteDeck, listDecks } from "../utils/api";
 import { Link, useHistory } from "react-router-dom";
 
-export default function Home({ deckListData, setDeckListData }) {
+export default function Home({
+  deckListData,
+  setDeckListData,
+  initialDeckFormData,
+  setDeckFormData,
+}) {
   const history = useHistory();
 
   async function deleteButtonHandler(indexToDelete) {
@@ -37,10 +42,13 @@ export default function Home({ deckListData, setDeckListData }) {
     };
   }, []);
   // console.log("Home-ln49-deckListdata:", deckListData);
-
+  const createButtonHandler = () => {
+    history.push("/decks/new");
+    setDeckFormData(initialDeckFormData);
+  };
   return (
     <>
-      <Link className="btn btn-secondary" to="/decks/new">
+      <button className="btn btn-secondary" onClick={createButtonHandler}>
         {" "}
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -53,7 +61,7 @@ export default function Home({ deckListData, setDeckListData }) {
           <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
         </svg>{" "}
         {"Create Deck"}
-      </Link>
+      </button>
       {deckListData.map((deck, index) => (
         <div
           key={index}

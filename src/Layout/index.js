@@ -15,10 +15,14 @@ function Layout() {
   // const { toggleFrontOrBack, setToggleFrontOrBack } = useState("false");
   const [deckListData, setDeckListData] = useState([]);
 
-  const initialCardFormData = { name: "", description: "" };
-  const initialDeckFormData = { deckId: "", cardId: "", front: "", back: "" };
+  const [initialDeckFormData, setInitialDeckFormData] = useState({
+    name: "",
+    description: "",
+  });
+  const initialCardFormData = { deckId: "", cardId: "", front: "", back: "" };
   const [cardFormData, setCardFormData] = useState({ ...initialCardFormData });
   const [deckFormData, setDeckFormData] = useState({ ...initialDeckFormData });
+  console.log("Index,DeckformData", deckFormData);
   return (
     <>
       <Header />
@@ -39,6 +43,8 @@ function Layout() {
             <Home
               deckListData={deckListData}
               setDeckListData={setDeckListData}
+              setDeckFormData={setCardFormData}
+              initialDeckFormData={initialDeckFormData}
             />
           </Route>
           <Route path="/decks/:deckId/study">
@@ -52,7 +58,10 @@ function Layout() {
             />
           </Route>
           <Route exact path="/decks/:deckId">
-            <Deck />
+            <Deck
+              deckListData={deckListData}
+              setDeckListData={setDeckListData}
+            />
           </Route>
           <Route path="/decks/:deckId/edit">
             <EditDeck

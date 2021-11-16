@@ -1,18 +1,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function breadyCrumbMaker({
+export default function BreadCrumbs({
   componentType,
   deckId,
   deckName,
-  location,
+  deckLoc,
+  currentLocation,
+  // optional,
 }) {
   /* --------- displays -- Home  ----------------*/
   if (componentType === "single") {
     return (
       <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item active" aria-current="page">
+        <ol className="breadcrumb">
+          <li className="breadcrumb-item active" aria-current="page">
             Home
           </li>
         </ol>
@@ -24,12 +26,12 @@ export default function breadyCrumbMaker({
   if (componentType === "double") {
     return (
       <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
+        <ol className="breadcrumb">
+          <li className="breadcrumb-item">
             <Link to="/">Home</Link>
           </li>
-          <li class="breadcrumb-item active" aria-current="page">
-            Library
+          <li className="breadcrumb-item active" aria-current="page">
+            {deckName}
           </li>
         </ol>
       </nav>
@@ -39,15 +41,15 @@ export default function breadyCrumbMaker({
   /* ---------------- displays -- Home/Library/Data  ---------------*/
   return (
     <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
+      <ol className="breadcrumb">
+        <li className="breadcrumb-item">
           <Link to="/">Home</Link>
         </li>
-        <li class="breadcrumb-item">
-          <Link to="deckLoc">DeckName</Link>
+        <li className="breadcrumb-item">
+          <Link to={deckLoc}>{deckName}</Link>
         </li>
-        <li class="breadcrumb-item active" aria-current="page">
-          {location}
+        <li className="breadcrumb-item active" aria-current="page">
+          {currentLocation}
         </li>
       </ol>
     </nav>

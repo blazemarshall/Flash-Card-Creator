@@ -7,13 +7,16 @@ import {
   deleteDeck,
   listDecks,
 } from "../utils/api";
+import BreadCrumbs from "./common/BreadCrumbs";
 
-export default function Deck() {
+export default function Deck({ setDeckListData, deckListData }) {
   const params = useParams();
   const { deckId, cardId } = params;
   const [deckLoaded, setDeckLoaded] = useState({});
   const [cardsLoaded, setCardsLoaded] = useState();
   const history = useHistory();
+  const componentType = "double";
+
   useEffect(() => {
     const ac = new AbortController();
     // let deck = {};
@@ -23,16 +26,8 @@ export default function Deck() {
 
         const deck = await response;
 
-        console.log(
-          "loadDeckAsyncFunctUseeffct.deck and card",
-          deck,
-          "card"
-          // card
-        );
         setDeckLoaded(deck);
         setCardsLoaded(deck.cards);
-
-        // setCardLoaded(card);
       } catch (error) {
         if (error.name === "AbortError") {
           console.log("Aborted");
@@ -43,68 +38,37 @@ export default function Deck() {
     }
     reloadDeck();
 
-    console.log();
-    // setFrontOrBackDescription(loadedDeck.cards[0].back);
     return () => {
       ac.abort();
     };
   }, [deckId]);
 
   async function deleteButtonHandler(indexToDelete) {
-    //needs to be changed to allow direct manipulation of the api data.
-    //currently only deletes from a temporary array.
     if (window.confirm("Do you really want to quash this item?")) {
       window.alert("Oh, you've done, did it now!");
-      await deleteDeck(indexToDelete).then(history.push("/"));
-      setDeckListData(await listDecks());
+      await deleteDeck(indexToDelete);
+      history.push("/");
+      // setDeckListData(await listDecks());
     } else {
       window.alert("Thank God!");
     }
   }
   const deleteCardHandler = (thisId) => {
-    console.log(thisId);
+    // console.log(thisId);
     if (window.confirm("Do you really want to quash this item?")) {
       deleteCard(thisId);
-      readDeck(deckId);
-      // .then((response) => ))
-      // .then(() => setCardsLoaded(response));
-      // setCardsLoaded(
-
-      history.go(0);
+      readDeck(deckId).then(history.go(0));
     }
   };
-  // async function eleteTheCardHandler(cardIdToDelete) {
-  //   //needs to be changed to allow direct manipulation of the api data.
-  //   //currently only deletes from a temporary array.
-  //   {
-  //     window.alert("Oh, you've done, did it now!");
-  //     await deleteCard(cardIdToDelete);
-  //     // .then(history.push("/"));
-  //     // setDeckListData(await listDecks());
-  //     // setCardsLoaded()
-  //   } else {
-  //     window.alert("Thank God!");
-  //   }
-  // }
-  console.log(
-    "deckScreen -deckLoaded",
-    deckLoaded,
-    "cardsLoaded:",
-    cardsLoaded
-  );
 
+  const deckName = deckLoaded.name;
   return (
     <div style={{ width: "100%" }}>
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <Link to="/">Home</Link>
-          </li>
-          <li class="breadcrumb-item active" aria-current="page">
-            {deckLoaded.name}
-          </li>
-        </ol>
-      </nav>
+      <BreadCrumbs
+        componentType={componentType}
+        deckId={deckId}
+        deckName={deckName}
+      />
       {/*  */}
       <div key="index" id="deck.id" className=" " style={{ width: "100%" }}>
         {/*---Deck card render---*/}
@@ -125,7 +89,7 @@ export default function Deck() {
           }
         >
           <div
-            classname=" d-flex"
+            className=" d-flex"
             style={{
               // width: "100%"
               margin: "10px",
@@ -173,13 +137,16 @@ export default function Deck() {
               {" Study"}
             </Link>
             {/*------addCard----*/}
-            <Link class="btn btn-primary " to={`/decks/${deckId}/cards/new`}>
+            <Link
+              className="btn btn-primary "
+              to={`/decks/${deckId}/cards/new`}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
                 height="16"
                 fill="currentColor"
-                class="bi bi-plus"
+                className="bi bi-plus"
                 viewBox="1 1 16 16"
               >
                 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />

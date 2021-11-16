@@ -1,36 +1,27 @@
 {
   "decks": [
     {
-      "id": 1,
-      "name": "Rendering in React",
-      "description": "React's component structure allows for quickly building a complex web application that relies on DOM manipulation. "
-    },
-    {
       "name": "React Router",
       "description": "React Router is a collection of navigational components that compose declaratively with your application.",
       "id": 2
     },
     {
-      "name": "asdf",
-      "description": "asdf",
+      "name": "this deck has little cardssdf",
+      "description": "Tinysdf",
       "id": 3
     },
     {
-      "deckId": "",
-      "cardId": "",
-      "front": "",
-      "back": "",
-      "name": "xfb",
-      "description": "xb",
+      "name": "asdf",
+      "description": "asdf",
       "id": 4
     }
   ],
   "cards": [
     {
-      "front": "What path will match the follow Route?\n<Route>\n  <NotFound />\n</Route>",
+      "front": "What path will match the follow Route?\n<Route> \n  <NotFound />\n</Route>",
       "back": "All paths. A route with no path matches all URL's",
-      "deckId": 2,
-      "id": 4
+      "id": 4,
+      "deckId": 2
     },
     {
       "front": "What does <Switch> do?",
@@ -39,46 +30,40 @@
       "id": 5
     },
     {
-      "front": "deleteThisCardPlease",
-      "back": "Don't!",
-      "deckId": 2,
-      "id": 8
-    },
-    {
-      "front": "deleteThisCardPlease",
-      "back": "Don't!",
-      "deckId": 2,
-      "id": 9
-    },
-    {
       "front": "a",
       "back": "b",
       "deckId": 2,
       "id": 10
     },
     {
-      "front": "",
-      "back": "",
+      "front": "asdfasdf",
+      "back": "asdfsdf",
+      "deckId": 2,
+      "id": 11
+    },
+    {
+      "front": "asdf",
+      "back": "asdf",
       "deckId": 2,
       "id": 12
     },
     {
-      "front": "wonkeys",
-      "back": "wonders",
-      "id": 28,
-      "deckId": 1
+      "front": "a",
+      "back": "",
+      "deckId": 3,
+      "id": 14
     },
     {
-      "front": "fdsa",
-      "back": "fdsa",
-      "deckId": 1,
-      "id": 30
+      "front": "d",
+      "back": "d",
+      "deckId": 3,
+      "id": 17
     },
     {
       "front": "asdf",
       "back": "asdf",
       "deckId": 3,
-      "id": 31
+      "id": 18
     }
   ]
 }

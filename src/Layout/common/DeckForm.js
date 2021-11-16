@@ -1,31 +1,46 @@
 import { Link } from "react-router-dom";
 
 export default function DeckForm({
-  changeHandler,
-  submitHandler,
-  deckFormData,
+  changeHandlerForCreate,
+  changeHandlerForEdit,
+  submitHandlerForCreate,
+  submitHandlerForEdit,
+  deckFormDataForCreate,
   createScreen,
   setDeckFormData,
+  initialDeckFormData,
+  setDeckFormDataForEdit,
+  deckFormDataForEdit,
 }) {
-  // if (createScreen) {
-  //   setDeckFormData();
-  // }
+  let changeHandler = createScreen
+    ? changeHandlerForCreate
+    : changeHandlerForEdit;
+  let submitHandler = createScreen
+    ? submitHandlerForCreate
+    : submitHandlerForEdit;
+  let nameValueHandler = createScreen
+    ? deckFormDataForCreate.name
+    : deckFormDataForEdit.name;
+  let descriptionValueHandler = createScreen
+    ? deckFormDataForCreate.description
+    : deckFormDataForEdit.description;
+
   return (
     <div>
       <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
+        <ol className="breadcrumb">
+          <li className="breadcrumb-item">
             <Link to="/">Home</Link>
           </li>
-          <li class="breadcrumb-item active" aria-current="page">
+          <li className="breadcrumb-item active" aria-current="page">
             {createScreen ? "Create Deck" : "Edit Deck"}
           </li>
         </ol>
       </nav>
       <h1>{createScreen ? "Create Deck" : "Edit Deck"}</h1>
       <form onSubmit={submitHandler}>
-        <div class="mb-3">
-          <label htmlFor="name" class="form-label">
+        <div className="mb-3">
+          <label htmlFor="name" className="form-label">
             Name
           </label>
           <input
@@ -35,11 +50,11 @@ export default function DeckForm({
             id="name"
             placeholder="Deck Name"
             onChange={changeHandler}
-            value={deckFormData.name}
+            value={nameValueHandler}
           />
         </div>
-        <div class="mb-3">
-          <label htmlFor="description" class="form-label">
+        <div className="mb-3">
+          <label htmlFor="description" className="form-label">
             Description
           </label>
           <textarea
@@ -48,14 +63,14 @@ export default function DeckForm({
             className="form-control"
             id="description"
             rows="3"
-            value={deckFormData.description}
+            value={descriptionValueHandler}
             onChange={changeHandler}
           ></textarea>
           <div>
-            <Link to="/" class="btn btn-secondary">
+            <Link to="/" className="btn btn-secondary">
               Cancel
             </Link>
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" className="btn btn-primary">
               Submit
             </button>
           </div>

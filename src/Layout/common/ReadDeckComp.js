@@ -1,7 +1,12 @@
 import React, { useEffect } from "react";
 import { readDeck } from "../../utils/api";
 
-export default function ReadDeckComp({ deckId, setLoadedDeck, loadedDeck }) {
+export default function ReadDeckComp({
+  deckId,
+  setDeckFormData,
+  setLoadedDeck,
+  loadedDeck,
+}) {
   useEffect(() => {
     const ac = new AbortController();
 
@@ -10,7 +15,8 @@ export default function ReadDeckComp({ deckId, setLoadedDeck, loadedDeck }) {
         const response = await readDeck(deckId);
         const deck = response;
         console.log("loadDeckAsyncFunctUseeffct.deck", deck);
-        setLoadedDeck(deck);
+        // setLoadedDeck(deck);
+        setDeckFormData(deck);
       } catch (error) {
         if (error.name === "AbortError") {
           console.log("Aborted");
