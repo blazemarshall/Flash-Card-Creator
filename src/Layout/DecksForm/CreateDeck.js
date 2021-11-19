@@ -5,16 +5,15 @@ import DeckForm from "../common/DeckForm";
 
 export default function CreateDeck() {
   //--------------------------------------------------------------------------------
-  const [initialDeckFormDataForCreate, setInitialDeckFormDataForCreate] =
-    useState({
-      name: "",
-      description: "",
-    });
+  const initialDeckFormDataForCreate = {
+    name: "",
+    description: "",
+  };
   const [deckFormDataForCreate, setDeckFormDataForCreate] = useState(
     initialDeckFormDataForCreate
   );
   const history = useHistory();
-  const [createScreen, setCreateScreen] = useState(true);
+  const createScreen = true;
 
   //-----------------Change and Submit Handlers-------------------------------------
   const changeHandlerForCreate = ({ target }) => {

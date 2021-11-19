@@ -8,13 +8,12 @@ import CardForm from "../common/CardForm";
 export default function EditCard() {
   const history = useHistory();
   const [deckLoad, setDeckLoad] = useState({});
-  const [thisCard, setThisCard] = useState({});
   const params = useParams();
   const { deckId, cardId } = params;
-  const [initialFormData, setInitialFormData] = useState({
+  const initialFormData = {
     front: "",
     back: "",
-  });
+  };
   const [formDataForEdit, setFormDataForEdit] = useState({
     ...initialFormData,
   });
@@ -30,7 +29,6 @@ export default function EditCard() {
         const card = cardResponse;
 
         setDeckLoad(deck);
-        setThisCard(card);
         setFormDataForEdit({
           front: card.front,
           back: card.back,

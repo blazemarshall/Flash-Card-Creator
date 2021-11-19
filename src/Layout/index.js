@@ -14,12 +14,11 @@ import NotFound from "./NotFound";
 function Layout() {
   const [deckListData, setDeckListData] = useState([]);
 
-  const [initialDeckFormData, setInitialDeckFormData] = useState({
+  const initialDeckFormData = {
     name: "",
     description: "",
-  });
-  const initialCardFormData = { deckId: "", cardId: "", front: "", back: "" };
-  const [cardFormData, setCardFormData] = useState({ ...initialCardFormData });
+  };
+
   const [deckFormData, setDeckFormData] = useState({ ...initialDeckFormData });
 
   return (
@@ -31,7 +30,6 @@ function Layout() {
             <Home
               deckListData={deckListData}
               setDeckListData={setDeckListData}
-              setDeckFormData={setCardFormData}
               initialDeckFormData={initialDeckFormData}
             />
           </Route>

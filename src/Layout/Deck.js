@@ -18,9 +18,7 @@ export default function Deck() {
     async function reloadDeck() {
       try {
         const response = await readDeck(deckId);
-
         const deck = await response;
-
         setDeckLoaded(deck);
         setCardsLoaded(deck.cards);
       } catch (error) {
@@ -54,13 +52,12 @@ export default function Deck() {
     }
   };
 
-  const deckName = deckLoaded.name;
   return (
     <div style={{ width: "100%" }}>
       <BreadCrumbs
         componentType={componentType}
         deckId={deckId}
-        deckName={deckName}
+        deckName={deckLoaded.name}
       />
       <DeckRender
         deckLoaded={deckLoaded}

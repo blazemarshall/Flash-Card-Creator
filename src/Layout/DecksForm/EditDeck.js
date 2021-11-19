@@ -7,7 +7,7 @@ export default function EditDeck() {
   const [deckFormDataForEdit, setDeckFormDataForEdit] = useState({});
   const history = useHistory();
   const { deckId } = useParams();
-  const [createScreen, setCreateScreen] = useState(false);
+  const createScreen = false;
 
   const changeHandlerForEdit = ({ target }) => {
     setDeckFormDataForEdit({
@@ -31,7 +31,6 @@ export default function EditDeck() {
         const response = await readDeck(deckId);
         const deck = response;
 
-        // setLoadedDeck(deck);
         setDeckFormDataForEdit(deck);
       } catch (error) {
         if (error.name === "AbortError") {
@@ -52,8 +51,8 @@ export default function EditDeck() {
         changeHandlerForEdit={changeHandlerForEdit}
         submitHandlerForEdit={submitHandlerForEdit}
         createScreen={createScreen}
-        descriptionValue={deckFormDataForEdit.description}
-        nameValue={deckFormDataForEdit.name}
+        descriptionValue={deckFormDataForEdit}
+        nameValue={deckFormDataForEdit}
         deckFormDataForEdit={deckFormDataForEdit}
         setDeckFormDataForEdit={setDeckFormDataForEdit}
       />

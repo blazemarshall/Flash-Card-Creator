@@ -3,11 +3,9 @@ import { Link } from "react-router-dom";
 
 export default function BreadCrumbs({
   componentType,
-  deckId,
   deckName,
   deckLoc,
   currentLocation,
-  // optional,
 }) {
   /* --------- displays -- Home  ----------------*/
   if (componentType === "single") {

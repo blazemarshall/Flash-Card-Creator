@@ -88,6 +88,7 @@ export default function Study() {
       frontOrBackText = "Back";
     }
   }
+  //varaibles for rendered components.
   const deckName = loadedDeckForStudy.name;
   const componentType = "triple";
   const currentLocation = "Study";
@@ -115,6 +116,4 @@ export default function Study() {
       />
     </div>
   );
-
-  // );
 }
