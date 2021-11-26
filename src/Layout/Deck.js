@@ -57,12 +57,12 @@ export default function Deck() {
       <BreadCrumbs
         componentType={componentType}
         deckId={deckId}
-        deckName={deckLoaded.name}
+        deckName={deckLoaded}
       />
       <DeckRender
         deckLoaded={deckLoaded}
         deckId={deckId}
-        deleteButtonHandle={deleteButtonHandler}
+        deleteButtonHandler={deleteButtonHandler}
         cardsLoaded={cardsLoaded}
         deleteCardHandler={deleteCardHandler}
       />

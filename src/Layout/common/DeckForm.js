@@ -11,16 +11,16 @@ export default function DeckForm({
   submitHandlerForEdit,
 }) {
   //-----------Logic to determine actions based on whether its the CreateDeck Screen.
-  let name = "";
-  let description = "";
+  // let name = "";
+  // let description = "";
 
-  if (createScreen) {
-    name = deckFormDataForCreate.name;
-    description = deckFormDataForCreate.description;
-  } else {
-    name = deckFormDataForEdit.name;
-    description = deckFormDataForEdit.description;
-  }
+  // if (createScreen) {
+  //   name = deckFormDataForCreate.name;
+  //   description = deckFormDataForCreate.description;
+  // } else {
+  //   name = deckFormDataForEdit.name;
+  //   description = deckFormDataForEdit.description;
+  // }
   //------------------------------------------------------------------------------------
   return (
     <div>
@@ -51,7 +51,11 @@ export default function DeckForm({
             onChange={
               createScreen ? changeHandlerForCreate : changeHandlerForEdit
             }
-            value={name}
+            value={
+              createScreen
+                ? deckFormDataForCreate.name
+                : deckFormDataForEdit.name
+            }
           />
         </div>
         <div className="mb-3">
@@ -64,7 +68,11 @@ export default function DeckForm({
             className="form-control"
             id="description"
             rows="3"
-            value={description}
+            value={
+              createScreen
+                ? deckFormDataForCreate.description
+                : deckFormDataForEdit.description
+            }
             onChange={
               createScreen ? changeHandlerForCreate : changeHandlerForEdit
             }

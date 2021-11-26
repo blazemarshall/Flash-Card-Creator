@@ -7,10 +7,13 @@ import HomeDeckRender from "./HomeDeckRender";
 export default function Home({
   deckListData,
   setDeckListData,
-  initialDeckFormData,
   setDeckFormData,
 }) {
   const history = useHistory();
+  // const initialDeckFormData = {
+  //   name: "",
+  //   description: "",
+  // };
 
   async function deleteButtonHandler(indexToDelete) {
     if (window.confirm("Do you really want to quash this item?")) {
@@ -43,7 +46,6 @@ export default function Home({
 
   const createButtonHandler = () => {
     history.push("/decks/new");
-    setDeckFormData(initialDeckFormData);
   };
   return (
     <div>

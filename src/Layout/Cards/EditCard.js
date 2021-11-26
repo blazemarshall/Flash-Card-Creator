@@ -64,7 +64,7 @@ export default function EditCard() {
   };
 
   //------Component Dependant Variables--------------------------------
-  const deckName = deckLoad.name;
+  const deckName = deckLoad;
   const componentType = "triple";
   const currentLocation = `Edit Card: ${cardId}`;
   const deckLoc = `/decks/${deckId}`;

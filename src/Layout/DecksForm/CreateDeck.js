@@ -30,7 +30,7 @@ export default function CreateDeck() {
       .then((response) => (destination = response.id))
       .then(() => history.push(`/decks/${destination}`));
 
-    console.log("formData:", deckFormDataForCreate);
+    // console.log("formData:", deckFormDataForCreate);
   };
   //--------------------------------------------------------------------------------
   return (

@@ -30,7 +30,6 @@ function Layout() {
             <Home
               deckListData={deckListData}
               setDeckListData={setDeckListData}
-              initialDeckFormData={initialDeckFormData}
             />
           </Route>
           <Route path="/decks/:deckId/study">

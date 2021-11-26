@@ -89,7 +89,7 @@ export default function Study() {
     }
   }
   //varaibles for rendered components.
-  const deckName = loadedDeckForStudy.name;
+  const deckName = loadedDeckForStudy;
   const componentType = "triple";
   const currentLocation = "Study";
   const deckLoc = `/decks/${deckId}`;

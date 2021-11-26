@@ -52,7 +52,7 @@ export default function AddCard() {
     setFormDataForAdd(initalFormData);
   };
   //Component Dependant Variables---------------------------------------
-  const deckName = deckLoad.name;
+  const deckName = deckLoad;
   const componentType = "triple";
   const currentLocation = "Add Card";
   const deckLoc = `/decks/${deckId}`;

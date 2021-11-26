@@ -29,13 +29,13 @@ export default function BreadCrumbs({
             <Link to="/">Home</Link>
           </li>
           <li className="breadcrumb-item active" aria-current="page">
-            {deckName}
+            {deckName.name}
           </li>
         </ol>
       </nav>
     );
   }
-
+  // console.log
   /* ---------------- displays -- Home/Library/Data  ---------------*/
   return (
     <nav aria-label="breadcrumb">
@@ -44,7 +44,7 @@ export default function BreadCrumbs({
           <Link to="/">Home</Link>
         </li>
         <li className="breadcrumb-item">
-          <Link to={deckLoc}>{deckName}</Link>
+          <Link to={deckLoc}>{deckName.name}</Link>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
           {currentLocation}
